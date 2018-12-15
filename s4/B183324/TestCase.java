@@ -41,7 +41,17 @@ public class TestCase {
 	    freq = myObject.frequency();
 	    System.out.print("\"H\" in \"Hi Ho Hi Ho\" appears "+freq+" times. ");
 	    if(4 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
-	}
+
+      /* 追加分 */
+      System.out.println("checking s4.B183324.Frequencer 2");
+	    myObject = new s4.B183324.Frequencer();
+	    myObject.setSpace("talk tonight".getBytes());
+	    myObject.setTarget("talk".getBytes());
+	    freq = myObject.frequency();
+	    System.out.print("\"talk\" in \"talk tonight\" appears "+freq+" times. ");
+	    if(3 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+
+  }
 	catch(Exception e) {
 	    System.out.println("Exception occurred: STOP");
 	}
