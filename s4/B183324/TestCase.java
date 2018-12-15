@@ -49,7 +49,7 @@ public class TestCase {
 	    myObject.setTarget("talk".getBytes());
 	    freq = myObject.frequency();
 	    System.out.print("\"talk\" in \"talk tonight\" appears "+freq+" times. ");
-	    if(3 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+	    if(1 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
 
   }
 	catch(Exception e) {
