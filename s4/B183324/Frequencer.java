@@ -7,10 +7,6 @@ import s4.specification.*;
 import java.util.Arrays;
 import java.nio.charset.StandardCharsets;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
 /*package s4.specification;
 
 public interface FrequencerInterface {     // This interface provides the design for frequency counter.
