@@ -7,6 +7,10 @@ import s4.specification.*;
 import java.util.Arrays;
 import java.nio.charset.StandardCharsets;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
 /*package s4.specification;
 
 public interface FrequencerInterface {     // This interface provides the design for frequency counter.
@@ -217,7 +221,11 @@ public class Frequencer implements FrequencerInterface{
     	//
       for(int i = 0; i < suffixArray.length; i++){
         if(targetCompare(suffixArray[i], start, end)==0){
+<<<<<<< HEAD
           //System.out.println("i="+i);
+=======
+          System.out.println("i="+i);
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
           return i;
         }
       }
@@ -234,7 +242,11 @@ public class Frequencer implements FrequencerInterface{
     	//
       for(int i = suffixArray.length-1; i > -1; i--){
         if(targetCompare(suffixArray[i], start, end)==0){
+<<<<<<< HEAD
           //System.out.println("i="+(i+1));
+=======
+          System.out.println("i="+(i+1));
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
           return i+1;
         }
       }
@@ -293,15 +305,23 @@ public class Frequencer implements FrequencerInterface{
 	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
 	    //
       for(int i = 0; i < frequencerObject.suffixArray.length; i++){
+<<<<<<< HEAD
         //System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
+=======
+        System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
       }
 	    int result = frequencerObject.frequency();
 	    System.out.print("Freq = "+ result+" ");
 	    if(4 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
 	}
 	catch(Exception e) {
+<<<<<<< HEAD
 	    System.out.println("STOP");
       System.out.println(e);
+=======
+	    System.out.println("STOP" + e);
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
 	}
     }
 }

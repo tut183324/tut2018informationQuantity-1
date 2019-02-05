@@ -83,7 +83,11 @@ public class InformationEstimator implements InformationEstimatorInterface{
 			// value1 = IQ(#"ab")+IQ(#"cde")+IQ(#"fg") for the above example
 			double value1 = (double) 0.0;
 			int end = 0;;
+<<<<<<< HEAD
 			int start = end;			
+=======
+			int start = end;
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
 			while(start<myTarget.length) {
 				// System.out.write(myTarget[end]);
 				end++;
@@ -94,6 +98,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 				double min = Double.MAX_VALUE;
 				// System.out.print("("+start+","+end+")");
 				myFrequencer.setTarget(subBytes(myTarget, start, end));
+<<<<<<< HEAD
 				/*for(int i=0; i<subByte(myTarget, start, end).length-1; i++){
 					min = Math.min(min, iqArray[]+iqArray[]);
 				}
@@ -104,6 +109,18 @@ public class InformationEstimator implements InformationEstimatorInterface{
 			}
 			// System.out.println(" "+ value1);
 
+=======
+				for(int i=0; i<subByte(myTarget, start, end).length-1; i++){
+					min = Math.min(min, iqArray[]+iqArray[]);
+				}
+				iqArray[i] = Math.min(min ,iq(myFrequencer.frequency()));
+
+				//value1 = value1 + iq(myFrequencer.frequency());
+				start = end;
+			}
+			// System.out.println(" "+ value1);
+
+>>>>>>> 8ded668e640cb9e1b8fa6b94ec48166cb542e23c
 			// Get the minimal value in "value"
 			if(value1 < value) value = value1;
 		}
