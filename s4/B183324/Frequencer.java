@@ -143,6 +143,7 @@ public class Frequencer implements FrequencerInterface{
     	}
     	// Sorting is not implmented yet.
     	// ****  Please write code here... ***
+
       //bubble sort
       /*for (int i = 0; i < mySpace.length - 1; i++) {
           for (int j = mySpace.length - 1; j > i; j--) {
@@ -153,8 +154,31 @@ public class Frequencer implements FrequencerInterface{
               }
           }
       }*/
+
       //merge sort
       sort(suffixArray);
+    }
+
+    private int binarySearch(int i, int j, int end){
+      int pLeft = 0;
+      int pRight = mySpace.length - 1;
+      do{
+        int center = (pLeft + pRight) / 2;
+        if(mySpace[suffixArray[center]] == myTarget[j]){
+          return center;
+        }
+        else if(mySpace[suffixArray[center]] < myTarget[j]){
+          pLeft = center + 1;
+        }
+        else if(mySpace[suffixArray[center]] > myTarget[j]){
+          pLeft = center - 1;
+        }
+      }while(pLeft <= pRight);
+
+      while(j < myTarget.length){
+        myTarget[j++] = 1;
+      }
+      return -1;
     }
 
     private int targetCompare(int i, int j, int end) {
@@ -185,9 +209,9 @@ public class Frequencer implements FrequencerInterface{
         else if(mySpace[i] < myTarget[j]){
           return -1;
         }else if(mySpace[i] == myTarget[j]){
-          /*if((mySpace.length - i - 1) < (end - j - 1)){
-            return -1;
-          }*/
+          //if((mySpace.length - i - 1) < (end - j - 1)){
+          //  return -1;
+          //}
           i++;
           for(int k = j + 1; k < end; k++, i++){
             if(i < suffixArray.length){
@@ -215,13 +239,29 @@ public class Frequencer implements FrequencerInterface{
     	//
     	// ****  Please write code here... ***
     	//
-      for(int i = 0; i < suffixArray.length; i++){
+      /*for(int i = 0; i < suffixArray.length; i++){
         if(targetCompare(suffixArray[i], start, end)==0){
           //System.out.println("i="+i);
           return i;
         }
+      }*/
+      int Left = 0;
+      int Right = suffixArray.length -1;
+      int middle = (Left + Right) / 2;
+      int index = suffixArray.length;
+      while(Left <= Right){
+        middle = (Left + Right) / 2;
+        int result_tcnp = targetCompare(suffixArray[middle], start, end);
+        if(result_tcnp == 0){
+          index = middle;
+          Right = middle - 1;
+        }else if(result_tcnp == -1){
+          Left = middle + 1;
+        }else if(result_tcnp == 1){
+          Right = middle - 1;
+        }
       }
-    	return suffixArray.length; // This line should be modified.
+    	return index; // This line should be modified.
     }
 
     private int subByteEndIndex(int start, int end) {
@@ -232,13 +272,30 @@ public class Frequencer implements FrequencerInterface{
     	//
     	// ****  Please write code here... ***
     	//
-      for(int i = suffixArray.length-1; i > -1; i--){
+      /*for(int i = suffixArray.length-1; i > -1; i--){
         if(targetCompare(suffixArray[i], start, end)==0){
           //System.out.println("i="+(i+1));
           return i+1;
         }
       }
-    	return suffixArray.length; // This line should be modified.
+    	return suffixArray.length; // This line should be modified. */
+      int Left = 0;
+      int Right = suffixArray.length -1;
+      int middle = (Left + Right) / 2;
+      int index = suffixArray.length;
+      while(Left <= Right){
+        middle = (Left + Right) / 2;
+        int result_tcnp = targetCompare(suffixArray[middle], start, end);
+        if(result_tcnp == 0){
+          index = middle;
+          Left = middle + 1;
+        }else if(result_tcnp == -1){
+          Left = middle + 1;
+        }else if(result_tcnp == 1){
+          Right = middle - 1;
+        }
+      }
+    	return index + 1; // This line should be modified.
     }
 
     public int subByteFrequency(int start, int end) {
