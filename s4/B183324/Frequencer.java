@@ -159,28 +159,6 @@ public class Frequencer implements FrequencerInterface{
       sort(suffixArray);
     }
 
-    private int binarySearch(int i, int j, int end){
-      int pLeft = 0;
-      int pRight = mySpace.length - 1;
-      do{
-        int center = (pLeft + pRight) / 2;
-        if(mySpace[suffixArray[center]] == myTarget[j]){
-          return center;
-        }
-        else if(mySpace[suffixArray[center]] < myTarget[j]){
-          pLeft = center + 1;
-        }
-        else if(mySpace[suffixArray[center]] > myTarget[j]){
-          pLeft = center - 1;
-        }
-      }while(pLeft <= pRight);
-
-      while(j < myTarget.length){
-        myTarget[j++] = 1;
-      }
-      return -1;
-    }
-
     private int targetCompare(int i, int j, int end) {
     	// comparing suffix_i and target_j_end by dictonary order with limitation of length;
     	// if the beginning of
@@ -350,7 +328,7 @@ public class Frequencer implements FrequencerInterface{
 	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
 	    //
       for(int i = 0; i < frequencerObject.suffixArray.length; i++){
-        System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
+        //System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
       }
 	    int result = frequencerObject.frequency();
 	    System.out.print("Freq = "+ result+" ");
