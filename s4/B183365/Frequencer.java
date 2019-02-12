@@ -163,6 +163,8 @@ public class Frequencer implements FrequencerInterface{
   //
   // ****  Please write code here... ***
   //
+
+  
       for(int i=0; i<suffixArray.length; i++){
         int result = targetCompare(i,start,end);
         if(result == 0){

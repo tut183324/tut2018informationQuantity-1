@@ -38,6 +38,14 @@ public class Frequencer implements FrequencerInterface {
             }
         }
     }
+    public void sort(int[] array, int low, int high){
+           if(low < high){
+               int middle = (low + high) >>> 1;
+               sort(array, low , middle);
+               sort(array, middle+1, high);
+               merge(array, low, middle, high);
+           }
+    }
 
     private int suffixCompare(int i, int j) {
         // comparing two suffixes by dictionary order.
@@ -127,6 +135,7 @@ public class Frequencer implements FrequencerInterface {
         }
 
     }
+
     public void setSpace(byte[] space) {
         mySpace = space;
         if (mySpace.length > 0){
@@ -177,7 +186,6 @@ public class Frequencer implements FrequencerInterface {
         // "Ho" = "H" : "H" is in the head of suffix "Ho"
         //
         // **** Please write code here... ***
-        int k = 0;
         try {
             if (end - j > myTarget.length) {
                 throw new IllegalArgumentException("myTargetよりendが大きいです。");
@@ -189,14 +197,18 @@ public class Frequencer implements FrequencerInterface {
             e.printStackTrace();
         }
 
-        while (true) {
+        int k = 0;
+        if((mySpace.length - i) < (end -j)){
+            return -1;
+        }
+        while(true){
             if(mySpace[i + k] > myTarget[j + k]){
                 return 1;
             }
             if(mySpace[i + k] < myTarget[j + k]){
                 return -1;
             }
-            if(k + 1 == end - j){
+            if((k + 1) == (end - j)){
                 return 0;
             }
             k++;
@@ -228,16 +240,12 @@ public class Frequencer implements FrequencerInterface {
         // For "Ho ", it will return 6 for "Hi Ho Hi Ho".
         //
         // **** Please write code here... ***
-        if (start > end) {
-            // startよりendが大きかった場合、startとendを入れ替え
-            int temp = start;
-            start = end;
-            end = temp;
-        }
-        if (end > myTarget.length || start < 0) {
-            // endが大きすぎるか、startが小さすぎる
-            return -1;
-        }
+        // if (start > end) {
+        //     startよりendが大きかった場合、startとendを入れ替え
+        //     int temp = start;
+        //     start = end;
+        //     end = temp;
+        // }
         // String str = new String(mySpace);
         // String targetStr = new String(myTarget);
         // targetStr = targetStr.substring(start, end);
@@ -270,10 +278,7 @@ public class Frequencer implements FrequencerInterface {
             start = end;
             end = temp;
         }
-        if (end > mySpace.length || start < 0) {
-            // endが大きすぎるか、startが小さすぎる
-            return -1;
-        }
+
         // String str = new String(mySpace);
         // String targetStr = new String(myTarget);
         // targetStr = targetStr.substring(start, end);
@@ -329,38 +334,31 @@ public class Frequencer implements FrequencerInterface {
             frequencerObject = new Frequencer();
             frequencerObject.setSpace("Hi Ho Hi Ho".getBytes());
             frequencerObject.printSuffixArray(); // you may use this line for DEBUG
-            /*
-             * Example from "Hi Ho Hi Ho" 
-             * 0: Hi Ho 
-             * 1: Ho 
-             * 2: Ho Hi Ho 
-             * 3:Hi Ho 
-             * 4:Hi Ho Hi Ho
-             * 5:Ho 
-             * 6:Ho Hi Ho 
-             * 7:i Ho 
-             * 8:i Ho Hi Ho 
-             * 9:o 
-             * A:o Hi Ho
-             */
-
+            /* Example from "Hi Ho Hi Ho"
+               0: Hi Ho
+               1: Ho
+               2: Ho Hi Ho
+               3:Hi Ho
+               4:Hi Ho Hi Ho
+               5:Ho
+               6:Ho Hi Ho
+               7:i Ho
+               8:i Ho Hi Ho
+               9:o
+               A:o Hi Ho
+            */
+    
             frequencerObject.setTarget("H".getBytes());
             //
-            // **** Please write code to check subByteStartIndex, and subByteEndIndex
-            
+            // ****  Please write code to check subByteStartIndex, and subByteEndIndex
             //
-            
-
+    
             int result = frequencerObject.frequency();
-            System.out.print("Freq = " + result + " ");
-            if (4 == result) {
-                System.out.println("OK");
-            } else {
-                System.out.println("WRONG");
-            }
-        } catch (Exception e) {
+            System.out.print("Freq = "+ result+" ");
+            if(4 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+        }
+        catch(Exception e) {
             System.out.println("STOP");
-            e.printStackTrace();
         }
     }
 }

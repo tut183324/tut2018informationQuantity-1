@@ -54,17 +54,29 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	boolean [] partition = new boolean[myTarget.length+1];
 	int np;
 	np = 1<<(myTarget.length-1);
-	double[][] targetIQ = new double[myTarget.length][myTarget.length+1];
-	for(int x=0;x<myTarget.length;x++) {
-    	for(int y = myTarget.length;y > x;y--) {
-    	myFrequencer.setTarget(subBytes(myTarget, x,y));
-		targetIQ[x][y] = iq(myFrequencer.frequency());
-    	}
-    	}
-	//System.out.println("np="+np+" length="+myTarget.length);
-	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
+	double[] targetIQ = new double[myTarget.length];
 
-	for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
+
+	myFrequencer.setTarget(subBytes(myTarget, 0,1));
+	targetIQ[0] = iq(myFrequencer.frequency());
+	for(int x=0;x<myTarget.length;x++) {
+		myFrequencer.setTarget(subBytes(myTarget, 0,x + 1));
+		double min = iq(myFrequencer.frequency());
+    	for(int y = 0;y < x;y++) {
+    		double iq1 = targetIQ[y];
+    		myFrequencer.setTarget(subBytes(myTarget, y + 1,x + 1));
+    		double iq2 = iq(myFrequencer.frequency());
+    		if(iq1 + iq2 < min && iq1 +iq2 !=  Double.NEGATIVE_INFINITY) {
+    			min = iq1 + iq2;
+    		}
+    	}
+    	targetIQ[x] = min;
+    	}
+	return 	targetIQ[myTarget.length - 1];
+	//System.out.println("np="+np+" length="+myTarget.length);
+	//double value = Double.MAX_VALUE; // value = mininimum of each "value1".
+
+	/*for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
 	    // binary representation of p forms partition.
 	    // for partition {"ab" "cde" "fg"}
 	    // a b c d e f g   : myTarget
@@ -87,16 +99,17 @@ public class InformationEstimator implements InformationEstimatorInterface{
 		    // System.out.write(myTarget[end]);
 		    end++;
 		}
-		 //System.out.print("("+start+","+end+")");
+		 System.out.print("("+start+","+end+")");
 		value1 = value1 + targetIQ[start][end];
 		start = end;
 	    }
-	    // System.out.println(" "+ value1);
+	     System.out.println(" "+ value1);
 
 	    // Get the minimal value in "value"
 	    if(value1 < value) value = value1;
 	}
-	return value;
+	System.out.println(" value "+ value);
+	//return value;*/
     }
 
     public static void main(String[] args) {

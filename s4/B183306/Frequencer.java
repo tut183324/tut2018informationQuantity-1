@@ -175,6 +175,33 @@ public	class	Frequencer	implements	FrequencerInterface{
         //	****		Please	write	code	here...	***
         //
         int posi = 0;
+        /*
+        int min = 0;
+        int max = suffixArray.length - 1;
+        while(true){
+            posi = targetCompare((min + max)/2,start,end);
+            if(posi == -1){
+                max = (min + max)/2;
+            }
+            if(posi == 1){
+                min = (min + max)/2;
+            }
+            if(posi == 0){
+                posi = (min + max) / 2;
+                for(int i = 1; i <= (min + max)/2; i++){
+                    posi = targetCompare((min + max)/2 - i,start,end);
+                    if(posi != 0){
+                        posi = (min + max)/2 -i + 1;
+                        return posi;
+                    }
+                }
+                return 0;
+            }
+            if(max - min == 0){
+                break;
+            }
+        }*/
+        
         for(int i = 0;i < suffixArray.length;i++){
             posi = targetCompare(i,start,end);
             if(posi == 0){
@@ -182,6 +209,7 @@ public	class	Frequencer	implements	FrequencerInterface{
                 return posi;
             }
         }
+        
         return	-1;
     }
     
@@ -262,7 +290,7 @@ public	class	Frequencer	implements	FrequencerInterface{
             */
 
 
-            frequencerObject.setTarget("A".getBytes());
+            frequencerObject.setTarget("AA".getBytes());
             //
             //	****		Please	write	code	to	check	subByteStartIndex,	and	subByteEndIndex
             //

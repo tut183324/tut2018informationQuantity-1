@@ -1,6 +1,6 @@
-//package s4.B183372; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID.
+package s4.B183372; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID.
 import java.lang.*;
-//import s4.specification.*;
+import s4.specification.*;
 
 /*
 interface FrequencerInterface {     // This interface provides the design for frequency counter.
@@ -15,8 +15,8 @@ interface FrequencerInterface {     // This interface provides the design for fr
 */
 
 
-public class Frequencer{
-//public class Frequencer implements FrequencerInterface{
+//public class Frequencer{
+public class Frequencer implements FrequencerInterface{
     // Code to start with: This code is not working, but good start point to work.
     byte [] myTarget;
     byte [] mySpace;
@@ -97,7 +97,7 @@ public class Frequencer{
 	}
 
 */
-  quick_sort(suffixArray,0,suffixArray.length-1);
+        merge_sort(suffixArray);
     }
 
     private void quick_sort(int[] d, int left, int right) {
@@ -118,6 +118,43 @@ public class Frequencer{
         }
         quick_sort(d, left, r);  // ピボットより左側をクイックソート
         quick_sort(d, l, right); // ピボットより右側をクイックソート
+    }
+    
+    /*
+     * マージ
+     * 2つの配列a1[]とa2[]を併合してa[]を作ります。
+     */
+    private void merge(int[] a1,int[] a2,int[] a){
+        int i=0,j=0;
+        while(i<a1.length || j<a2.length){
+            if(j>=a2.length || (i<a1.length && (suffixCompare(a1[i],a2[j]) == -1))){
+                a[i+j]=a1[i];
+                i++;
+            }
+            else{
+                a[i+j]=a2[j];
+                j++;
+            }
+        }
+    }
+    
+    /*
+     * マージソート
+     * 既にソート済みの2つの配列を併合して新しい配列を
+     * 生成することで、データのソートを行います。
+     */
+    private void merge_sort(int[] a){
+        if(a.length>1){
+            int m=a.length/2;
+            int n=a.length-m;
+            int[] a1=new int[m];
+            int[] a2=new int[n];
+            for(int i=0;i<m;i++) a1[i]=a[i];
+            for(int i=0;i<n;i++) a2[i]=a[m+i];
+            merge_sort(a1);
+            merge_sort(a2);
+            merge(a1,a2,a);
+        }
     }
 
     private int targetCompare(int i, int j, int end) {
@@ -218,8 +255,8 @@ public class Frequencer{
 
 
       return suffixArray.length;
-      */
-
+      
+*/
       return binary_search(start,end,subByteStartIndex(start,end),suffixArray.length-1,1);
     }
 
@@ -254,6 +291,8 @@ public class Frequencer{
          return mid;
        }else if(comp_r == target){
          return mid-1;
+       }else if(mid >= target){
+           return suffixArray.length;
        }else{
         return suffixArray.length-1;
       }
@@ -312,7 +351,7 @@ public class Frequencer{
 	Frequencer frequencerObject;
 	try {
 	    frequencerObject = new Frequencer();
-	    	frequencerObject.setSpace("AABA".getBytes());
+	    	frequencerObject.setSpace("AAA".getBytes());
 	    frequencerObject.printSuffixArray(); // you may use this line for DEBUG
 	    /* Example from "Hi Ho Hi Ho"
 		   0: Hi Ho

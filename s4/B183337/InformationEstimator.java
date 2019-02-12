@@ -60,6 +60,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 			double value=Double.MAX_VALUE; // value = minimum of each "value1".
 			for(int j=i; j>=0; j--){
 				int freq=myFrequencer.subByteFrequency(j, i+1);
+				if(freq == 0) break; // Infinited
 				double value1 = iqArray[j] + iq(freq); 
 				if(value > value1) value = value1; // "value" is replaced minimum value.
 			}

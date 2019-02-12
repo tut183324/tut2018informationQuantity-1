@@ -97,8 +97,6 @@ public class InformationEstimator implements InformationEstimatorInterface {
             int freq = myFrequencer.subByteFrequency(0, i + 1);
             var iqn = iq(freq);
             cash[i] = Math.min(min, iqn);
-
-
         }
         var value = cash[myTarget.length-1];
         return Double.isInfinite(value) ? Double.MAX_VALUE : value;

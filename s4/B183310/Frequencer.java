@@ -16,27 +16,27 @@ interface FrequencerInterface {     // This interface provides the design for fr
 
 
 public class Frequencer implements FrequencerInterface{
-    // Code to Test, *warning: This code  contains intentional problem*
-    byte [] myTarget;
-    byte [] mySpace;
-    boolean targetReady = false;
-    boolean spaceReady = false;
+	// Code to Test, *warning: This code  contains intentional problem*
+	byte [] myTarget;
+	byte [] mySpace;
+	boolean targetReady = false;
+	boolean spaceReady = false;
 
-    int [] suffixArray;
+	int [] suffixArray;
 
-    private void printSuffixArray(){
-    	if(spaceReady){
-    		for(int i=0;i<mySpace.length;i++){
-    			int s = suffixArray[i];
-    			for(int j=s;j<mySpace.length;j++) {
+	private void printSuffixArray(){
+		if(spaceReady){
+			for(int i=0;i<mySpace.length;i++){
+				int s = suffixArray[i];
+				for(int j=s;j<mySpace.length;j++) {
 					System.out.write(mySpace[j]);
 				}
 				System.out.println("");
-    		}
-    	}
-    }
+			}
+		}
+	}
 
-    private int suffixCompare(int i, int j){
+	private int suffixCompare(int i, int j){
 		//	It	is	not	implemented	yet,
 		//	It	should	be	used	to	create	suffix	array.
 		//	Example	of	dictionary	order
@@ -46,7 +46,6 @@ public class Frequencer implements FrequencerInterface{
 		//
 		//	****		Please	write	code	here...	***
 		//
-//		while(i+1 >= mySpace.length && j+1 >= mySpace.length){
 		if (mySpace[i] > mySpace[j]) {
 			return 1;
 		} else if(mySpace[i] < mySpace[j]) {
@@ -62,7 +61,7 @@ public class Frequencer implements FrequencerInterface{
 			return suffixCompare(i+1,j+1);    //	This	line	should	be	modified.
 		}
 	}
-	
+
 	public void	setSpace(byte []space){
 		mySpace	= space;	if(mySpace.length>0)	spaceReady = true;
 		suffixArray	= new int[space.length];
@@ -72,31 +71,84 @@ public class Frequencer implements FrequencerInterface{
 			suffixArray[i] = i;
 		}
 
-		//	Sorting
-		for(int i=0;i<mySpace.length-1;i++) {
-			for (int j = 0; j < space.length - i - 1; j++) {
-				int r = suffixCompare(suffixArray[j], suffixArray[j + 1]);
-				//suffix compare
-				if (r == 1) { // suffix_j > suffix_j+1
-					int tmp = suffixArray[j];
-					suffixArray[j] = suffixArray[j + 1];
-					suffixArray[j + 1] = tmp;
-				}
+//		quickSort(suffixArray,0,suffixArray.length-1);
+		mergeSort(suffixArray,0,suffixArray.length-1);
+//		//	Sorting
+//		for(int i=0;i<mySpace.length-1;i++) {
+//			for (int j = 0; j < space.length - i - 1; j++) {
+//				int r = suffixCompare(suffixArray[j], suffixArray[j + 1]);
+//				//suffix compare
+//				if (r == 1) { // suffix_j > suffix_j+1
+//					int tmp = suffixArray[j];
+//					suffixArray[j] = suffixArray[j + 1];
+//					suffixArray[j + 1] = tmp;
+//				}
+//			}
+//		}
+	}
+
+	private void merge(int arr[], int l, int m, int r)	{
+		int i;
+		int j;
+		int k;
+		int n1 = m - l + 1;
+		int n2 = r - m;
+
+		int [] L = new int[n1];
+		int [] R = new int[n2];
+
+		for (i = 0; i < n1; i++)
+			L[i] = arr[l + i];
+		for (j = 0; j < n2; j++)
+			R[j] = arr[m + 1+ j];
+
+		i = 0; // Initial index of first subarray
+		j = 0; // Initial index of second subarray
+		k = l; // Initial index of merged subarray
+		while (i < n1 && j < n2){
+			if (this.suffixCompare(L[i], R[j]) == -1){
+				arr[k] = L[i];
+
+				i++;
+			}else{
+				arr[k] = R[j];
+				j++;
 			}
+			k++;
+		}
+		while (i < n1){
+			arr[k] = L[i];
+			i++;
+			k++;
+		}
+		while (j < n2){
+			arr[k] = R[j];
+			j++;
+			k++;
+		}
+	}
+
+	private void mergeSort(int arr[], int l, int r)
+	{
+		if (l < r){
+			int m = l+(r-l)/2;
+			mergeSort(arr, l, m);
+			mergeSort(arr, m+1, r);
+			merge(arr, l, m, r);
 		}
 	}
 
 	private int targetCompare(int i, int j, int end) {
-    	int s=suffixArray[i];
-    	for (int k=0;j<end;k++,j++){
-    		if(mySpace[s+k] < myTarget[j] || end-j > mySpace.length-s){
-    			return -1;
-    		} else if (mySpace[s+k] > myTarget[j]){
-    			return 1;
-    		}
-    	}
-    	return 0;
-    }
+		int s=suffixArray[i];
+		for (int k=0;j<end;k++,j++){
+			if(mySpace[s+k] < myTarget[j] || end-j > mySpace.length-s){
+				return -1;
+			} else if (mySpace[s+k] > myTarget[j]){
+				return 1;
+			}
+		}
+		return 0;
+	}
 
 	private int subByteStartIndex(int start, int end) {
 		for (int i=0; i<=mySpace.length-1;i++) {
@@ -173,41 +225,40 @@ public class Frequencer implements FrequencerInterface{
 			freq = myObject.frequency();
 			System.out.print("\"H\" in \"Hi Ho Hi Ho\" appears "+freq+" times. ");
 			if(4 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
-			
+
 			myObject = new Frequencer();
 			myObject.setSpace("AAA".getBytes());
 			myObject.setTarget("A".getBytes());
 			freq = myObject.frequency();
 			if(3 != freq) { System.out.println("frequency() for AAA should return 3, when target is A. But it returns  "+freq); }
-			
+
 			myObject = new Frequencer();
 			myObject.setSpace("AAA".getBytes());
 			myObject.setTarget("AA".getBytes());
 			freq = myObject.frequency();
 			if(2 != freq) { System.out.println("frequency() for AAA, should return 2, when target is AA. But it returns "+freq); }
-			
+
 			myObject = new Frequencer();
 			myObject.setSpace("AAB".getBytes());
 			myObject.setTarget("B".getBytes());
 			freq = myObject.frequency();
 			if(1 != freq) { System.out.println("frequency() for AAB, should return 1, when target is B. But it returns "+freq); }
-			
+
 			myObject = new Frequencer();
 			myObject.setSpace("AAA".getBytes());
 			myObject.setTarget("AAA".getBytes());
 			freq = myObject.frequency();
 			if(1 != freq) { System.out.println("frequency() for AAA, should return 1, when target is AAA. But it returns "+freq); }
-			
+
 			myObject = new Frequencer();
 			myObject.setSpace("AAAB".getBytes());
 			myObject.setTarget("AAA".getBytes());
 			freq = myObject.frequency();
 			if(1 != freq) { System.out.println("frequency() for AAA, should return 1, when target is AAA. But it returns "+freq); }
-			
+
 		}
 		catch(Exception e) {
 			System.out.println("Exception occurred: STOP");
 		}
-    }
-}	    
-	    
+	}
+}

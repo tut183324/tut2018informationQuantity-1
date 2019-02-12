@@ -1,12 +1,10 @@
 all:
-	javac Hello.java -classpath "../.."
+#	javac Hello.java -classpath "../.."
 	javac Frequencer.java -classpath "../.."
 	javac InformationEstimator.java -classpath "../.."
 	javac TestCase.java -classpath "../.."
-#	javac Checker.java -classpath "../.."
 run:
 #	java -classpath "../.." s4.B183315/Hello
 #	java -classpath "../.." s4.B183315/Frequencer
 #	java -classpath "../.." s4.B183315/InformationEstimator
 	java -classpath "../.." s4.B183315/TestCase
-#	java -classpath "../.." s4.B183315/Checker

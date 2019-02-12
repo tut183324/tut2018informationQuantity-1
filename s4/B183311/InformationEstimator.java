@@ -20,6 +20,8 @@ public class InformationEstimator implements InformationEstimatorInterface {
   // Code to tet, *warning: This code condtains intentional problem*
   byte[] myTarget; // data to compute its information quantity
   byte[] mySpace; // Sample space to compute the probability
+  boolean targetReady = false; 
+  boolean spaceReady = false;
   FrequencerInterface myFrequencer; // Object for counting frequency
 
   double[][] iqSave;
@@ -53,15 +55,26 @@ public class InformationEstimator implements InformationEstimatorInterface {
 
   public void setTarget(byte[] target) {
     myTarget = target;
-  }
+    if(myTarget.length > 0){
+      targetReady = true;
+      }    
+    }
 
   public void setSpace(byte[] space) {
     myFrequencer = new Frequencer();
     mySpace = space;
+    if (mySpace.length > 0){
+      spaceReady = true;
+    }
     myFrequencer.setSpace(space);
   }
 
   public double estimation() {
+		if (targetReady == false){
+      return 0.0;
+    }else	if (spaceReady == false){
+			return Double.MAX_VALUE;
+    }
 
     boolean[] partition = new boolean[myTarget.length + 1];
     iqSave = new double[myTarget.length][myTarget.length + 1];
@@ -80,6 +93,7 @@ public class InformationEstimator implements InformationEstimatorInterface {
       partition[0] = true; // I know that this is not needed, but..
       for (int i = 0; i < myTarget.length - 1; i++) {
         partition[i + 1] = (0 != ((1 << i) & p));
+        //System.out.println(partition[i+1]);
       }
       partition[myTarget.length] = true;
 

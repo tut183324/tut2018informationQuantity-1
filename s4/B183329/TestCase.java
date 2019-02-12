@@ -40,7 +40,7 @@ public class TestCase {
 	    myObject.setTarget("H".getBytes());
 	    freq = myObject.frequency();
 	    System.out.print("\"H\" in \"Hi Ho Hi Ho\" appears "+freq+" times. ");
-	    if(4 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+	    if(4 == freq) { System.out.println("\nOK"); } else {System.out.println("WRONG"); }
         
         //TARGETの長さが0
         System.out.println("<TARGET's length is zero → return -1?>");
@@ -84,32 +84,7 @@ public class TestCase {
         System.out.println("\"H\" in    appears "+freq_5+" times. ");
         if(0 == freq_5) { System.out.println("OK"); } else {System.out.println("WRONG"); }
         
-        //subByteFrequencyが正しく動作するか
-        /*
-        System.out.println("<subByteFrequency is right?>");
-        FrequencerInterface  myObject_6;
-        int freq_6;
-        myObject_6 = new s4.B183329.Frequencer();
-        myObject_6.setSpace("Hi Ho Hi Ho".getBytes());
-        myObject_6.setTarget("H".getBytes());
-        freq_6 = myObject_6.subByteFrequency(2, 7);
-        System.out.println("\"\" in \" Ho H\" appears "+freq_6+" times. ");
-        if(2 == freq_6) { System.out.println("OK"); } else {System.out.println("WRONG"); }
-         */
-        // ->できていない
-        
-        //subByteFrequencyにおいてstartとendの値がおかしいときにどうなるか
-        /*
-        System.out.println("<subByteFrequency is right?>");
-        FrequencerInterface  myObject_7;
-        int freq_7;
-        myObject_7 = new s4.B183329.Frequencer();
-        myObject_7.setSpace("Hi Ho Hi Ho".getBytes());
-        myObject_7.setTarget("H".getBytes());
-        freq_7 = myObject_7.subByteFrequency(-2, -7);
-        System.out.println("\"\" in \" Ho H\" appears "+freq_7+" times. ");
-        */
-	}
+    }
 	catch(Exception e) {
 	    System.out.println("Exception occurred: STOP");
 	}

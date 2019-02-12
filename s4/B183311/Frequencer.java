@@ -75,17 +75,55 @@ public class Frequencer implements FrequencerInterface {
 			suffixArray[i] = i;
 		}
 
-		// Sorting
-		for (int i = 0; i < mySpace.length - 1; i++) {// 範囲を狭める
-			for (int j = 0; j < space.length - i - 1; j++) {
-				int r = suffixCompare(suffixArray[j], suffixArray[j + 1]);
-				// suffix compare
-				if (r == 1) { // suffix_j > suffix_j+1 の場合
-					int tmp = suffixArray[j];
-					suffixArray[j] = suffixArray[j + 1];
-					suffixArray[j + 1] = tmp;
-				}
+		// Bubble Sorting
+		// for (int i = 0; i < mySpace.length - 1; i++) {// 範囲を狭める
+		// for (int j = 0; j < space.length - i - 1; j++) {
+		// int r = suffixCompare(suffixArray[j], suffixArray[j + 1]);
+		// // suffix compare
+		// if (r == 1) { // suffix_j > suffix_j+1 の場合
+		// int tmp = suffixArray[j];
+		// suffixArray[j] = suffixArray[j + 1];
+		// suffixArray[j + 1] = tmp;
+		// }
+		// }
+		// }
+
+		// Heap Sorting
+		int[] heap;
+		int num;
+		int target;
+
+		heap = new int[suffixArray.length];
+		num = 0;
+
+		for (target = 0; target < suffixArray.length; target++) {
+			heap[num++] = suffixArray[target];
+			int i = num, j = i / 2;
+			while ((i > 1) && (suffixCompare(heap[i - 1], heap[j - 1]) == -1)) {
+				int t = heap[i - 1];
+				heap[i - 1] = heap[j - 1];
+				heap[j - 1] = t;
+				i = j;
+				j = i / 2;
 			}
+		}
+
+		for (target = 0; num > 0; target++) {
+			int r = heap[0];
+			heap[0] = heap[--num];
+			int i = 1, j = i * 2;
+			while (j <= num) {
+				if ((j + 1 <= num) && (suffixCompare(heap[j - 1], heap[j]) == 1))
+					j++;
+				if (suffixCompare(heap[i - 1], heap[j - 1]) == 1) {
+					int t = heap[i - 1];
+					heap[i - 1] = heap[j - 1];
+					heap[j - 1] = t;
+				}
+				i = j;
+				j = i * 2;
+			}
+			suffixArray[target] = r;
 		}
 	}
 

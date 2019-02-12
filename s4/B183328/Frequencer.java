@@ -289,13 +289,14 @@ public class Frequencer implements FrequencerInterface{
   }
 
     public void setTarget(byte [] target) {
-	myTarget = target; if(myTarget.length>0) targetReady = true;
+	     myTarget = target;
+       if(myTarget.length>0) targetReady = true;
     }
 
     public int frequency() {
-	if(targetReady == false) return -1;
-	if(spaceReady == false) return 0;
-	return subByteFrequency(0, myTarget.length);
+    	if(targetReady == false) return -1;
+    	if(spaceReady == false) return 0;
+    	return subByteFrequency(0, myTarget.length);
     }
 
     public static void main(String[] args) {

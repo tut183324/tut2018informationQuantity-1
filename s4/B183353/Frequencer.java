@@ -205,7 +205,7 @@ public class Frequencer implements FrequencerInterface{
     }
 
     private int subByteStartIndex(int start, int end) {
-
+/*
       try {
           if(start <= end) {
             System.out.println("check3: OK");
@@ -242,11 +242,11 @@ public class Frequencer implements FrequencerInterface{
       catch(Exception e) {
           System.out.println("Exception occurred: STOP");
       }
-
+*/
 
       for(int i = 0; i < suffixArray.length; i++){
         if(targetCompare(suffixArray[i],start,end) == 0){
-          System.out.println("start :" + i);
+          //System.out.println("start :" + i);
           return i;
         }
       }
@@ -262,7 +262,7 @@ public class Frequencer implements FrequencerInterface{
     }
 
     private int subByteEndIndex(int start, int end) {
-
+/*
       try {
           if(start <= end) {
             System.out.println("check6: OK");
@@ -299,11 +299,11 @@ public class Frequencer implements FrequencerInterface{
       catch(Exception e) {
           System.out.println("Exception occurred: STOP");
       }
-
+*/
       for(int i = suffixArray.length-1; i >= 0 ; i--){
         if(targetCompare(suffixArray[i],start,end) == 0){
-          System.out.print("end :");
-          System.out.println(i+1);
+          //System.out.print("end :");
+          //System.out.println(i+1);
           return i+1;
         }
       }

@@ -77,27 +77,21 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	
 	public double estimation(){
 		myFrequencer.setTarget(myTarget);
-
+		double value, value1;
 		double [] myEstimation = new double [myTarget.length + 1];
-		myEstimation[0] = (double) 0.0;
-		double value1 = 0.0;
+		myEstimation[0] = 0.0;
 
 		for(int n=1; n<=myTarget.length; n++){
-			double value = Double.MAX_VALUE; // value = mininimum of each "value1".
+			value = Double.MAX_VALUE; // value = mininimum of each "value1".
 			for(int start=n-1; start>=0; start--) {
 				int freq = myFrequencer.subByteFrequency(start, n);
-				if(freq != 0) {
-					value1 = myEstimation[start]+iq(freq);
-				}
+				value1 = myEstimation[start]+iq(freq);
 				if(value>value1) value = value1;
-				else break; 
 			}
 			myEstimation[n] = value;
 		}
 		return myEstimation[myTarget.length];
 	}
-
-
 
     public static void main(String[] args) {
 		InformationEstimator myObject;

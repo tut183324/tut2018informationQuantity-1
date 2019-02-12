@@ -12,7 +12,7 @@ public interface InformationEstimatorInterface{
 // The behavior is undefined, if the true value is finete but larger than Double.MAX_VALUE.
 // Note that this happens only when the space is unreasonably large. We will encounter other problem anyway.
 // Otherwise, estimation of information quantity, 
-}                        
+}
 */
 
 public class InformationEstimator implements InformationEstimatorInterface{
@@ -22,7 +22,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     boolean s_Ready = false, t_Ready = false;
     FrequencerInterface myFrequencer;  // Object for counting frequency
 
-    byte [] subBytes(byte [] x, int start, int end){
+    /*byte [] subBytes(byte [] x, int start, int end){
 	// corresponding to substring of String for  byte[] ,
 	// It is not implement in class library because internal structure of byte[] requires copy.
         byte [] result = new byte[end - start];
@@ -30,7 +30,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
             result[i] = x[start + i];
         };
         return result;
-    }
+    }*/
 
     // IQ: information quantity for a count,  -log2(count/sizeof(space))
     double iq(int freq){

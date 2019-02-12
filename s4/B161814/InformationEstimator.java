@@ -53,6 +53,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
         //IQ[1]のときは無分割
         myFrequencer.setTarget(myTarget);
         IQ[1] = iq(myFrequencer.subByteFrequency(0,1));
+        min = IQ[1];
         
         //IQ[N+1]を求めるためのループ
         for(i=2;i<myTarget.length+1;i++){
@@ -61,15 +62,20 @@ public class InformationEstimator implements InformationEstimatorInterface{
             for(int j=0;j<i-1;j++){
                 f[j] = iq(myFrequencer.subByteFrequency(i-j-1, i));
                 min_can[j] = IQ[i-j-1] + f[j];
+                if(min > min_can[j]){
+                    min = min_can[j];
+                }
             }
             
+            /*
             //minを探索
             for(int k=0;k<i-1;k++){
                 if(min > min_can[k]){
                     min = min_can[k];
                 }
             }
-
+             */
+             
             //無分割のときの情報量を計算
             origin = iq(myFrequencer.subByteFrequency(0, i));
             if(min > origin){

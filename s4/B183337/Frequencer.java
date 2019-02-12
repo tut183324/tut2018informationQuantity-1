@@ -143,13 +143,22 @@ public class Frequencer implements FrequencerInterface{
 	if(mySpace[i] > myTarget[j])        return  1;
 	else if(mySpace[i] < myTarget[j])   return -1;
 	else if(mySpace[i] == myTarget[j]){
-		if(mySpace.length-i < end-j)          return -1;
-		for(j++, i++; j<end; j++, i++){
-			if(mySpace[i] > myTarget[j])      return  1;
-			else if(mySpace[i] < myTarget[j]) return -1;
+		if(mySpace.length-i >= end-j){
+			for(j++, i++; j<end; j++, i++){
+				if(mySpace[i] > myTarget[j])      return  1;
+				else if(mySpace[i] < myTarget[j]) return -1;
+			}
+			return 0;
+		}else{
+			for(j++, i++; i<mySpace.length; j++, i++){
+				if(mySpace[i] > myTarget[j])      return  1;
+				else if(mySpace[i] < myTarget[j]) return -1;
+			}
+			return -1;
+
 		}
 	}
-	return 0;
+	return -1;
 	}
 
 		private int subByteStartIndex(int start, int end) {

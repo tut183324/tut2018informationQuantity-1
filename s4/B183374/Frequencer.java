@@ -225,7 +225,7 @@ public class Frequencer implements FrequencerInterface{
 		else right = center;
 		//if(center == left)return right;
 		}
-		return right;
+	return right;
 	}
 	
 

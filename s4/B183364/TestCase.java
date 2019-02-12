@@ -149,8 +149,8 @@ public class TestCase {
 	  // }
 
     int c;
-  c = 0;
-  try {
+    c = 0;
+    try {
       FrequencerInterface  myObject;
       int freq;
         c = 0;

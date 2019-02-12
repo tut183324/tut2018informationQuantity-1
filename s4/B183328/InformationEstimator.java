@@ -21,6 +21,9 @@ public class InformationEstimator implements InformationEstimatorInterface{
     byte [] mySpace;  // Sample space to compute the probability
     FrequencerInterface myFrequencer;  // Object for counting frequency
 
+    boolean target_flag = false;
+    boolean space_flag = false;
+
     byte [] subBytes(byte [] x, int start, int end) {
     	// corresponding to substring of String for  byte[] ,
     	// It is not implement in class library because internal structure of byte[] requires copy.
@@ -35,138 +38,148 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	     return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
-    public void setTarget(byte [] target) { myTarget = target;}
+    public void setTarget(byte [] target) {
+       myTarget = target;
+       if(target.length>0){
+         target_flag = true;
+       }
+
+     }
     public void setSpace(byte []space) {
     	myFrequencer = new Frequencer();
     	mySpace = space; myFrequencer.setSpace(space);
+      if(space.length>0){
+        space_flag = true;
+      }
     }
 
-    //小さい値を返す
-    public double min(double a,double b){
-      if(a<b){
-        return a;
-      }
-      else{
-        return b;
-      }
-    }
 
 
     //ここを書き直す
     public double estimation(){
-      double [] Iq = new double[myTarget.length+1];
-      int start= 0;
-      int end = 0;
-      double value=0;
-      double value_t=0;
-      for(int i=0;i<myTarget.length;i++){
-        end = i+1;
-        //最初の一文字目
-        if(i==0){
-          //最初の一文字めの情報量
-          myFrequencer.setTarget(subBytes(myTarget, start, end));
-      		Iq[i] = iq(myFrequencer.frequency());
-          value = Iq[i];
-          // System.out.println("iq:"+iq(myFrequencer.frequency()));
+
+        double [] Iq = new double[myTarget.length+1];
+        int start= 0;
+        int end = 0;
+        double value=Double.MAX_VALUE;
+        double value_t=0;
+        double result;
+
+        if(target_flag == false){
+          System.out.println("target-f = false");
+          return 0.0;
         }
 
-        else{
-          //一番小さい情報量を求める
-          for(int j=0;j<end;j++){
-            start=j;
+        if(space_flag == false){
+          System.out.println("space-f = false");
+          return Double.MAX_VALUE;
+
+        }
+
+
+        for(int i=0;i<myTarget.length;i++){
+          value = Double.MAX_VALUE;
+          end = i+1;
+          //最初の一文字目
+          if(i==0){
+            //最初の一文字めの情報量
             myFrequencer.setTarget(subBytes(myTarget, start, end));
-            value_t = iq(myFrequencer.frequency());
-            //全ての文字列（f(abc)みたいな）
-        		if(j==0){
-              value = value_t;
+            result = myFrequencer.frequency();
+
+            if(result == -1){
+              System.out.println("result = -1");
+               result = 0.0;
             }
-            //そうじゃない
+            else if(result == 0){
+              System.out.println("result = 0");
+              result = Double.MAX_VALUE;
+            }
+
             else{
-              value_t = Iq[j-1]+value_t;
-              if(value_t<value){
-                value = value_t;
+
+              result = iq((int)result);
+              // System.out.println("result = "+result);
+            }
+
+        		Iq[i] = result;
+          }
+
+          else{
+            //一番小さい情報量を求める
+            for(int j=0;j<end;j++){
+              start=j;
+
+              myFrequencer.setTarget(subBytes(myTarget, start, end));
+              value_t = myFrequencer.frequency();
+              if(value_t == -1){
+                // System.out.println("result = -1");
+                 value_t = 0.0;
               }
+              else if(value_t == 0.0){
+                // System.out.println("result = 0");
+                value_t = Double.MAX_VALUE;
+              }
+
+              else{
+                value_t = iq((int)value_t);
+              }
+
+                //全ての文字列（f(abc)みたいな）じゃないとき
+                if(j!=0){
+                  value_t = Iq[j-1]+value_t;
+                }
+
+                if(value_t<value){
+                  value = value_t;
+                }
+              }
+              Iq[i] = value;
             }
           }
-          Iq[i] = value;
+          // System.out.println("Iq["+i+"]:"+Iq[i]);
 
-        }
-        // System.out.println("Iq["+i+"]:"+Iq[i]);
-      }
+        target_flag = false;
+      	return Iq[myTarget.length-1];
 
-
-    	// boolean [] partition = new boolean[myTarget.length+1];
-    	// int np;
-    	// np = 1<<(myTarget.length-1);
-    	// // System.out.println("np="+np+" length="+myTarget.length);
-    	// double value = Double.MAX_VALUE; // value = mininimum of each "value1".
-    	// for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
-    	//     // binary representation of p forms partition.
-    	//     // for partition {"ab" "cde" "fg"}
-    	//     // a b c d e f g   : myTarget
-    	//     // T F T F F T F T : partition:
-    	//     partition[0] = true; // I know that this is not needed, but..
-    	//     for(int i=0; i<myTarget.length -1;i++) {
-    	// 	partition[i+1] = (0 !=((1<<i) & p));
-      //
-    	//     }
-    	//     partition[myTarget.length] = true;
-      //
-    	//     // Compute Information Quantity for the partition, in "value1"
-    	//     // value1 = IQ(#"ab")+IQ(#"cde")+IQ(#"fg") for the above example
-      //           double value1 = (double) 0.0;
-    	//     int end = 0;;
-    	//     int start = end;
-    	//   while(start<myTarget.length) {
-      // 		// System.out.write(myTarget[end]);
-      // 		end++;;
-      // 		while(partition[end] == false) {
-      // 		    // System.out.write(myTarget[end]);
-      // 		    end++;
-      // 		}
-      // 		System.out.print("("+start+","+end+")");
-      // 		myFrequencer.setTarget(subBytes(myTarget, start, end));
-      // 		value1 = value1 + iq(myFrequencer.frequency());
-      //     System.out.println("iq:"+iq(myFrequencer.frequency()));
-      // 		start = end;
-    	//    }
-    	//     // System.out.println(" "+ value1);
-      //
-    	//     // Get the minimal value in "value"
-    	//     if(value1 < value) value = value1;
-    	// }
-    	return value;
     }
 
     public static void main(String[] args) {
-	InformationEstimator myObject;
-	double value;
-	myObject = new InformationEstimator();
-	myObject.setSpace("3210321001230123".getBytes());
-	myObject.setTarget("0".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0 "+value);
-	myObject.setTarget("01".getBytes());
-	value = myObject.estimation();
-	System.out.println(">01 "+value);
+    	InformationEstimator myObject;
+    	double value;
+    	myObject = new InformationEstimator();
+    	myObject.setSpace("3210321001230123".getBytes());
+    	myObject.setTarget("0".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">0 "+value);
+
+    	myObject.setTarget("01".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">01 "+value);
 
 
-	myObject.setTarget("0123".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0123 "+value);
+    	myObject.setTarget("0123".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">0123 "+value);
 
 
-	myObject.setTarget("00".getBytes());
-	value = myObject.estimation();
-	System.out.println(">00 "+value);
+    	myObject.setTarget("00".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">00 "+value);
 
-  myObject.setTarget("1".getBytes());
-	value = myObject.estimation();
-	System.out.println(">1 "+value);
+      myObject.setTarget("1".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">1 "+value);
 
-  myObject.setTarget("11".getBytes());
-	value = myObject.estimation();
-	System.out.println(">11 "+value);
+      myObject.setTarget("11".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">11 "+value);
 
+      myObject.setTarget("".getBytes());
+    	value = myObject.estimation();
+    	System.out.println("> "+value);
+
+      myObject.setTarget("9".getBytes());
+    	value = myObject.estimation();
+    	System.out.println(">9 "+value);
     }
 }

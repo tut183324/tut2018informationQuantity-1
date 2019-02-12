@@ -19,9 +19,9 @@ public class InformationEstimator implements InformationEstimatorInterface{
     // Code to tet, *warning: This code condtains intentional problem*
     byte [] myTarget; // data to compute its information quantity
     byte [] mySpace;  // Sample space to compute the probability
+    boolean TargetFlag = false;
+    boolean SpaceFlag = false;
     int count = 0;
-
-
 
     FrequencerInterface myFrequencer;  // Object for counting frequency
 
@@ -38,16 +38,29 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	     return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
-    public void setTarget(byte [] target) { myTarget = target;}
+    public void setTarget(byte [] target) {
+      myTarget = target;
+      TargetFlag = true;
+    }
     public void setSpace(byte []space) {
   	myFrequencer = new Frequencer();
   	mySpace = space; myFrequencer.setSpace(space);
+    SpaceFlag = true;
     }
 
 
-
-
     public double estimation(){
+      if((TargetFlag == false) || (myTarget.length == 0)){
+        //System.out.println("Target is not set");
+        return 0.0;
+      }
+
+      if(SpaceFlag == false){
+        //System.out.println("Space is not set");
+        return Double.MAX_VALUE;
+      }
+
+
       double[] iq = new double[myTarget.length+1];
       int end=0,start=0;
       double value = Double.MAX_VALUE;
@@ -57,13 +70,13 @@ public class InformationEstimator implements InformationEstimatorInterface{
         end = i + 1;
         if(i == 0){
           myFrequencer.setTarget(subBytes(myTarget, start, end)); //myTargetの対象の文字列をセット
-      		iq[i] = iq(myFrequencer.frequency());
+          iq[i] = iq(myFrequencer.frequency());
         }
         else{
           for(int j=0; j<end; j++){
             start = j;
             myFrequencer.setTarget(subBytes(myTarget, start, end)); //myTargetの対象の文字列をセット
-        		value1 = iq(myFrequencer.frequency());
+            value1 = iq(myFrequencer.frequency());
             if(start != 0){
               value1 = iq[j-1] + value1;
             }
@@ -75,8 +88,13 @@ public class InformationEstimator implements InformationEstimatorInterface{
         }
 
       }
+      if (Double.isInfinite(iq[myTarget.length-1])){
+        return Double.MAX_VALUE;
+      }
       return iq[myTarget.length-1];
     }
+
+
 
     public static void main(String[] args) {
 	InformationEstimator myObject;

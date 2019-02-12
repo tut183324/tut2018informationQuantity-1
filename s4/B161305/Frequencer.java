@@ -247,7 +247,7 @@ public class Frequencer implements FrequencerInterface{
 
         int s = 0, e = 0;
         s = frequencerObject.subByteStartIndex(0,frequencerObject.myTarget.length);
-        e = frequencerObject.subByteEndIndex(0,frequencerObject.myTarget.length);
+        e = frequencerObject.subByteEndIndex(s,frequencerObject.myTarget.length);
         System.out.println("start:" + s + " end:" + e);
 	    int result = frequencerObject.frequency();
 	    System.out.print("Freq = "+ result+" ");

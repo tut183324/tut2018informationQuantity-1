@@ -1,4 +1,4 @@
-package s4.B183312; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
+package s4.B183307; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID.
 import java.lang.*;
 import s4.specification.*;
 
@@ -117,7 +117,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
         double value = Double.MAX_VALUE;
         for(int start=n-1;start>=0;start--) {
             int freq = myFrequencer.subByteFrequency(start, n);
-            System.out.println("freq=" + freq + ",start=" + start + ",n=" + n);
+           
             if(freq != 0) {
             // update "value" if it is needed.
                 double value1 = prefixEstimation[start]+iq(freq);
@@ -131,8 +131,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
         }
         prefixEstimation[n]=value;
     }
-    for(int i = 0; i < myTarget.length + 1; i++)
-        System.out.println("array[" + i + "] = " + prefixEstimation[i]);
+    
     return prefixEstimation[myTarget.length];
 
 }

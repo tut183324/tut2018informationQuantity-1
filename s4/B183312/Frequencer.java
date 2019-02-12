@@ -81,12 +81,12 @@ public class Frequencer implements FrequencerInterface{
             spaceReady = true; 
         suffixArray = new int[space.length];
         //put all suffixes in suffixArray. Each suffix is expressed by one integer.
-        for(int i = 0; i< space.length; i++){
+        for(int i = 0; i < space.length; i++){
             suffixArray[i] = i;
         }
         // Sorting is not implmented yet.
         // ****  Please write code here... ***
-        for(int i = space.length - 1; i > 0; i--){
+        /*for(int i = space.length - 1; i > 0; i--){
             // j は交換する箇所の前からの番号を示している
             for(int j = 0; j < i; j++){
                 if(suffixCompare(suffixArray[j], suffixArray[j + 1]) == 1 || suffixCompare(suffixArray[j], suffixArray[j + 1]) == 0){
@@ -98,6 +98,36 @@ public class Frequencer implements FrequencerInterface{
                     //そのまま
                 }
             }
+        }*/
+        mergeSort(suffixArray);
+    }
+
+    void merge(int[] a1,int[] a2,int[] a){
+        int i = 0, j = 0;
+        while(i < a1.length || j < a2.length){
+            if(j >= a2.length || (i < a1.length && (suffixCompare(a1[i], a2[j]) == -1))){
+                a[i + j] = a1[i];
+                i++;
+            }else{
+                a[i + j] = a2[j];
+                j++;
+            }
+        }
+    }
+
+    void mergeSort(int[] a){
+        if(a.length > 1){
+            int m = a.length / 2;
+            int n = a.length - m;
+            int[] a1 = new int[m];
+            int[] a2 = new int[n];
+            for(int i = 0; i < m; i++)
+                a1[i] = a[i];
+            for(int i = 0; i < n; i++)
+                a2[i] = a[m + i];
+            mergeSort(a1);
+            mergeSort(a2);
+            merge(a1, a2, a);
         }
     }
 
@@ -122,28 +152,6 @@ public class Frequencer implements FrequencerInterface{
     //
     // ****  Please write code here... ***
     //
-    /*int s = suffixArray[i];
-    if(mySpace[s] < myTarget[j]){
-        return -1;
-    }
-    if(mySpace[s] > myTarget[j]){
-        return 1;
-    }
-    if((mySpace.length - s) < (end - j)){
-        return -1;
-    }
-    if(mySpace[i] == myTarget[0] && (end - j == 1)){
-        return 0;
-    }
-    for(int k = 0; k < end - j; k++){
-        if(mySpace[s + k] > myTarget[j + k]){
-            return 1;
-        }
-        if(mySpace[s + k] < myTarget[j + k]){
-            return -1;
-        }
-    }
-    return 0; // This line should be modified.*/
         int i_length = mySpace.length - suffixArray[i];
         int j_length = end - j;
         int tmp = end - j;
@@ -176,11 +184,6 @@ public class Frequencer implements FrequencerInterface{
     //
     // ****  Please write code here... ***
     //
-    /*for(int i = start; i < end; i++){
-        if(0 == targetCompare(i, 0, myTarget.length)){
-            return i;
-        }
-    }*/
         for(int k = 0; k < mySpace.length; k++){
             if(0 == targetCompare(k, start, end))
                 return k;

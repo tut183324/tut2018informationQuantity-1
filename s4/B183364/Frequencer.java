@@ -94,29 +94,44 @@ public class Frequencer implements FrequencerInterface{
       // ****  Please write code here... ***
       //
 
-      byte[] suffix_i = new byte[mySpace.length - i];
-      byte[] suffix_j = new byte[mySpace.length - j];
+      // byte[] suffix_i = new byte[mySpace.length - i];
+      // byte[] suffix_j = new byte[mySpace.length - j];
 
-      for(int k=i; k < mySpace.length; k++){
-        suffix_i[k-i] = mySpace[k];
-      }
+      // for(int k=i; k < mySpace.length; k++){
+      //   suffix_i[k-i] = mySpace[k];
+      // }
 
-      for(int k=j; k < mySpace.length; k++){
-        suffix_j[k-j] = mySpace[k];
-      }
+      // for(int k=j; k < mySpace.length; k++){
+      //   suffix_j[k-j] = mySpace[k];
+      // }
 
-      int min_num = Math.min(suffix_i.length, suffix_j.length);
+      // int min_num = (suffix_i.length < suffix_j.length) ? suffix_i.length : suffix_j.length;
+      int min_num = (mySpace.length - i < mySpace.length - j) ? mySpace.length - i : mySpace.length - j;
+
+      // for(int n=0; n < min_num; n++){
+      //   if(suffix_i[n] > suffix_j[n]){
+      //     return 1;
+      //   } else if(suffix_i[n] < suffix_j[n]){
+      //     return -1;
+      //   }
+      // }
+      // if(suffix_i.length > suffix_j.length){
+      //   return 1;
+      // } else if(suffix_i.length < suffix_j.length) {
+      //   return -1;
+      // }
+      // return 0;
 
       for(int n=0; n < min_num; n++){
-        if(suffix_i[n] > suffix_j[n]){
+        if(mySpace[n+i] > mySpace[n+j]){
           return 1;
-        } else if(suffix_i[n] < suffix_j[n]){
+        } else if(mySpace[n+i] < mySpace[n+j]){
           return -1;
         }
       }
-      if(suffix_i.length > suffix_j.length){
+      if(mySpace.length - i > mySpace.length - j){
         return 1;
-      } else if(suffix_i.length < suffix_j.length) {
+      } else if(mySpace.length - i < mySpace.length - j) {
         return -1;
       }
       return 0;
@@ -179,13 +194,25 @@ public class Frequencer implements FrequencerInterface{
       //
       // ****  Please write code here... ***
       //
-      for(int i=0; i<suffixArray.length; i++){
-        int result = targetCompare(i,start,end);
-        if(result == 0){
-          return i;
-        }
+      // for(int i=0; i<suffixArray.length; i++){
+      //   int result = targetCompare(i,start,end);
+      //   if(result == 0){
+      //     return i;
+      //   }
+      // }
+      // return suffixArray.length; // This line should be modified.
+      int left = 0;
+      int right = mySpace.length - 1;
+      int center = 0;
+
+      if(targetCompare(left,start,end) == 0) return left;
+
+      while(right - left > 1){
+        center = (left + right)/2;
+        if(targetCompare(center,start,end) >= 0) right = center;
+        else left =  center;
       }
-      return suffixArray.length; // This line should be modified.
+      return right;
     }
 
     private int subByteEndIndex(int start, int end) {
@@ -195,27 +222,39 @@ public class Frequencer implements FrequencerInterface{
       // For "Ho ", it will return 7 for "Hi Ho Hi Ho".
       //
       // ****  Please write code here... ***
-      for(int i=subByteStartIndex(start,end); i<suffixArray.length; i++){
-        int result = targetCompare(i,start,end);
-        if(result != 0){
-          return i;
-        }
+      // for(int i=subByteStartIndex(start,end); i<suffixArray.length; i++){
+      //   int result = targetCompare(i,start,end);
+      //   if(result != 0){
+      //     return i;
+      //   }
+      // }
+      // return suffixArray.length; // This line should be modified.
+      int left = 0;
+      int right = mySpace.length - 1;
+      int center = 0;
+
+      if(targetCompare(right,start,end) == 0) return suffixArray.length;
+
+      while(right - left > 1){
+        center = (left + right)/2;
+        if(targetCompare(center,start,end) <= 0) left = center;
+        else right =  center;
       }
-      return suffixArray.length; // This line should be modified.
+      return right;
     }
 
     public int subByteFrequency(int start, int end) {
-      /* This method be work as follows, but
-      int spaceLength = mySpace.length;
-      int count = 0;
-      for(int offset = 0; offset< spaceLength - (end - start); offset++) {
-          boolean abort = false;
-          for(int i = 0; i< (end - start); i++) {
-        if(myTarget[start+i] != mySpace[offset+i]) { abort = true; break; }
-          }
-          if(abort == false) { count++; }
-      }
-      */
+      /* This method be work as follows, but */
+      // int spaceLength = mySpace.length;
+      // int count = 0;
+      // for(int offset = 0; offset< spaceLength - (end - start); offset++) {
+      //     boolean abort = false;
+      //     for(int i = 0; i< (end - start); i++) {
+      //   if(myTarget[start+i] != mySpace[offset+i]) { abort = true; break; }
+      //     }
+      //     if(abort == false) { count++; }
+      // }
+
       int first = subByteStartIndex(start, end);
       int last1 = subByteEndIndex(start, end);
       return last1 - first;
@@ -252,7 +291,7 @@ public class Frequencer implements FrequencerInterface{
            A:o Hi Ho
         */
 
-        frequencerObject.setTarget("Hox".getBytes());
+        frequencerObject.setTarget("Ho".getBytes());
         //
         // ****  Please write code to check subByteStartIndex, and subByteEndIndex
         //

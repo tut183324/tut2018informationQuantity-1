@@ -21,8 +21,6 @@ public class InformationEstimator implements InformationEstimatorInterface{
   byte [] mySpace;  // Sample space to compute the probability
   FrequencerInterface myFrequencer;  // Object for counting frequency
 
-  double [][] iqSave;
-
   byte [] subBytes(byte [] x, int start, int end) {
 	  // corresponding to substring of String for  byte[] ,
     // It is not implement in class library because internal structure of byte[] requires copy.
@@ -45,29 +43,28 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
   public double estimation(){
     if(myTarget == null || myTarget.length == 0) return 0.0;
-    if(mySpace == null) return Double.MAX_VALUE;
+    if(mySpace == null || mySpace.length == 0) return Double.MAX_VALUE;
 
     double[] iqSave = new double[myTarget.length];
     double value;
     double tmp_value;
+    myFrequencer.setTarget(myTarget);
 
     for(int i=0; i < myTarget.length; i++){
       value = 0.0;
       for(int j=0; j <= i; j++){
-        myFrequencer.setTarget(subBytes(myTarget, j, i+1));
         if(j == 0){
-          value = iq(myFrequencer.frequency());
+          value = iq(myFrequencer.subByteFrequency(j,i+1));
         } else {
-          tmp_value = iqSave[j-1] + iq(myFrequencer.frequency());
-          if(value > tmp_value){
-            value = tmp_value;
-          }
+          tmp_value = iqSave[j-1] + iq(myFrequencer.subByteFrequency(j,i+1));
+          value = (value < tmp_value) ? value : tmp_value;
+          // value = Math.min(value, iqSave[j-1] + iq(myFrequencer.subByteFrequency(j,i+1)));
         }
       }
       iqSave[i] = value;
     }
-
-    return iqSave[myTarget.length - 1];
+    double result = iqSave[myTarget.length - 1];
+    return Double.isInfinite(result) ? Double.MAX_VALUE : result;
   }
 
   public static void main(String[] args) {

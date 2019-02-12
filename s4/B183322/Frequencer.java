@@ -80,24 +80,65 @@ public class Frequencer implements FrequencerInterface{
     }
   }
 
+  public void Merge(int[] left, int[] right, int[] out){
+    int i=0;
+    int j=0;
+    while(i<left.length || j<right.length){
+      if(j>=right.length || (i<left.length && suffixCompare(left[i], right[j]) == -1)){
+        out[i+j] = left[i];
+        i++;
+      }
+      else{
+        out[i+j] = right[j];
+        j++;
+      }
+    }
+  }
+
+  public void mergeSort(int[] array){
+    if(array.length > 1){
+      int l = array.length/2;
+      int r = array.length - l;
+      int[] left = new int[l];
+      int[] right = new int[r];
+      for(int k=0; k<l; k++) left[k] = array[k];
+      for(int k=0; k<r; k++) right[k] = array[l+k];
+      mergeSort(left);
+      mergeSort(right);
+      Merge(left,right,array);
+    }
+  }
+
   public void setSpace(byte []space) {
   	int temp;
-  	mySpace = space; if(mySpace.length>0) spaceReady = true;
+  	mySpace = space;
+    if(mySpace.length>0) spaceReady = true;
   	suffixArray = new int[space.length];
 	// put all suffixes  in suffixArray. Each suffix is expressed by one integer.
   	for(int i = 0; i< space.length; i++) {
   	    suffixArray[i] = i;
   	}
-  	for(int i = 0; i< (suffixArray.length-1); i++){
-  	  for(int j = (suffixArray.length-1); j > i; j--){
-  	    if(suffixCompare(suffixArray[j-1], suffixArray[j]) == 1){
-  	      temp = suffixArray[j-1];
-  	      suffixArray[j-1] = suffixArray[j];
-  	      suffixArray[j] = temp;
-  	    }
-  	  }
-  	}
+    mergeSort(suffixArray);
   }
+
+  // public void setSpace(byte []space) {
+  // 	int temp;
+  // 	mySpace = space; if(mySpace.length>0) spaceReady = true;
+  // 	suffixArray = new int[space.length];
+	// // put all suffixes  in suffixArray. Each suffix is expressed by one integer.
+  // 	for(int i = 0; i< space.length; i++) {
+  // 	    suffixArray[i] = i;
+  // 	}
+  // 	for(int i = 0; i< (suffixArray.length-1); i++){
+  // 	  for(int j = (suffixArray.length-1); j > i; j--){
+  // 	    if(suffixCompare(suffixArray[j-1], suffixArray[j]) == 1){
+  // 	      temp = suffixArray[j-1];
+  // 	      suffixArray[j-1] = suffixArray[j];
+  // 	      suffixArray[j] = temp;
+  // 	    }
+  // 	  }
+  // 	}
+  // }
 
   private int targetCompare(int i, int j, int end) {
 	// comparing suffix_i and target_j_end by dictonary order with limitation of length;
@@ -236,7 +277,8 @@ public class Frequencer implements FrequencerInterface{
   	try {
   	    frequencerObject = new Frequencer();
         System.out.println("-------------------suffix array--------------------");
-  	    frequencerObject.setSpace("AAAB".getBytes());
+  	    //frequencerObject.setSpace("AAAB".getBytes());
+        frequencerObject.setSpace("Hi Ho Hi Ho".getBytes());
   	    frequencerObject.printSuffixArray(); // you may use this line for DEBUG
   	    /* Example from "Hi Ho Hi Ho"
   	       0: Hi Ho
@@ -252,11 +294,11 @@ public class Frequencer implements FrequencerInterface{
   	       A:o Hi Ho
   	    */
         System.out.println("-------------------探索--------------------");
-  	    frequencerObject.setTarget("AAAAB".getBytes());
+  	    frequencerObject.setTarget("H".getBytes());
   	    //
   	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
-        int first = frequencerObject.subByteStartIndex(4, 5);
-        int last = frequencerObject.subByteEndIndex(4, 5);
+        int first = frequencerObject.subByteStartIndex(0, 1);
+        int last = frequencerObject.subByteEndIndex(0, 1);
         System.out.printf("start:%d/end:%d\n",first,last);
   	    //
   	    int result = frequencerObject.frequency();

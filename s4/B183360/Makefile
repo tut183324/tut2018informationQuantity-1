@@ -7,5 +7,5 @@ all:
 run:
 #	java -classpath "../.." s4.B183360/Hello
 #	java -classpath "../.." s4.B183360/Frequencer
-#	java -classpath "../.." s4.B183360/InformationEstimator
+	java -classpath "../.." s4.B183360/InformationEstimator
 	java -classpath "../.." s4.B183360/TestCase

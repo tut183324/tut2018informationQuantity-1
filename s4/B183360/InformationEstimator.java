@@ -21,6 +21,9 @@ public class InformationEstimator implements InformationEstimatorInterface{
     byte [] mySpace;  // Sample space to compute the probability
     int count = 0;
 
+    boolean targetReady = false;
+    boolean spaceReady = false;
+
 
 
     FrequencerInterface myFrequencer;  // Object for counting frequency
@@ -38,17 +41,37 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	     return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
-    public void setTarget(byte [] target) { myTarget = target;}
+    public void setTarget(byte [] target){
+      myTarget = target;
+      if(myTarget.length>0){
+            targetReady = true;
+      }
+    }
+
     public void setSpace(byte []space) {
-  	myFrequencer = new Frequencer();
-  	mySpace = space; myFrequencer.setSpace(space);
+    	myFrequencer = new Frequencer();
+    	mySpace = space;
+      myFrequencer.setSpace(space);
+      if(mySpace.length>0){
+        spaceReady = true;
+      }
     }
 
 
 
 
     public double estimation(){
-      double[] iq = new double[myTarget.length+1];
+      if(targetReady == false){ //エラー処理:when the target is not set or Target's length is zero
+        System.out.println("setTarget()が行われていません。");
+        
+        return 0.0;
+      }
+      if(spaceReady == false){ //エラー処理:when the space is not set.
+        System.out.println("setSpace()が行われていません。");
+        
+        return Double.MAX_VALUE;
+      }
+      double[] iq = new double[myTarget.length+1]; //計算結果を保持しておく配列
       int end=0,start=0;
       double value = Double.MAX_VALUE;
       double value1;
@@ -67,7 +90,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
             if(start != 0){
               value1 = iq[j-1] + value1;
             }
-            if(value > value1){
+            if(value > value1){ //最小をとる
               value = value1;
             }
           }
@@ -75,25 +98,35 @@ public class InformationEstimator implements InformationEstimatorInterface{
         }
 
       }
+
+      if(Double.isInfinite(iq[myTarget.length-1])){ //It returns Double.MAX_VALUE, when the true value is infinite
+        return Double.MAX_VALUE;
+      }
+
       return iq[myTarget.length-1];
     }
 
-    public static void main(String[] args) {
-	InformationEstimator myObject;
-	double value;
-	myObject = new InformationEstimator();
-	myObject.setSpace("3210321001230123".getBytes());
-	myObject.setTarget("0".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0 "+value);
-	myObject.setTarget("01".getBytes());
-	value = myObject.estimation();
-	System.out.println(">01 "+value);
-	myObject.setTarget("0123".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0123 "+value);
-	myObject.setTarget("00".getBytes());
-	value = myObject.estimation();
-	System.out.println(">00 "+value);
-    }
+  public static void main(String[] args) {
+  	InformationEstimator myObject;
+  	double value;
+  	myObject = new InformationEstimator();
+  	myObject.setSpace("3210321001230123".getBytes());
+  	myObject.setTarget("0".getBytes());
+  	value = myObject.estimation();
+  	System.out.println(">0 "+value);
+  	myObject.setTarget("01".getBytes());
+  	value = myObject.estimation();
+  	System.out.println(">01 "+value);
+  	myObject.setTarget("0123".getBytes());
+  	value = myObject.estimation();
+  	System.out.println(">0123 "+value);
+  	myObject.setTarget("00".getBytes());
+  	value = myObject.estimation();
+  	System.out.println(">00 "+value);
+
+    // myObject.setTarget("09".getBytes());
+    // value = myObject.estimation();
+    // System.out.println(">09 "+value);
+
+  }
 }
