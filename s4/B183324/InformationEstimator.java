@@ -48,7 +48,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
 	public double estimation(){
 		// "iqArray" that is keeping Results of Information Quantity.
-		double [] iqArray = new double[myTarget.length+1];
+		double[] iqArray = new double[myTarget.length+1];
 		iqArray[0] = 0.0; // "iqArray[0]" is not changed by Computing Information Quantity.
 
 		if(!targetReady) return 0.0; // When Target length is 0 or Target is not setted.
