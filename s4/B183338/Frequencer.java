@@ -60,20 +60,20 @@ public class Frequencer implements FrequencerInterface{
 	int i2 = i;
 	int j2 = j;
 	for(int k = 0; k < mySpace.length-Math.max(i2, j2); k++){
-	if(mySpace[i] > mySpace[j]){
-		return 1;
-	}
-	else if(mySpace[i] < mySpace[j]){
-		return -1;
-	}
-	else if(mySpace[i] == mySpace[j]){
-		i++;
-		j++;
-		continue;
-	}
-	else{
-	}		
-	//return 1; // This line should be modified.
+		if(mySpace[i] > mySpace[j]){
+			return 1;
+		}
+		else if(mySpace[i] < mySpace[j]){
+			return -1;
+		}
+		else if(mySpace[i] == mySpace[j]){
+			i++;
+			j++;
+			continue;
+		}
+		else{
+		}		
+		//return 1; // This line should be modified.
 	}
 	if(i > j){
 		return -1;
@@ -89,29 +89,32 @@ public class Frequencer implements FrequencerInterface{
 	return 0;
 	}
 
-	public void setSpace(byte []space) { 
-	mySpace = space; if(mySpace.length>0) spaceReady = true; 
-	suffixArray = new int[space.length];
-	// put all suffixes	 in suffixArray. Each suffix is expressed by one integer.
-	for(int i = 0; i< space.length; i++) {
-		suffixArray[i] = i;
-	}
-	// Sorting is not implmented yet.
-	//
-	//
-	// ****	 Please write code here... ***
-	//
-	for (int i = 0; i < suffixArray.length - 1; i++) {
-	for (int j = suffixArray.length - 1; j > i; j--) {
-		int tmpNum = suffixArray[j-1];
-		int sufComp = suffixCompare(suffixArray[j-1], suffixArray[j]);
-		if(sufComp == 1){
-			tmpNum = suffixArray[j-1];
-			suffixArray[j-1] = suffixArray[j];
-			suffixArray[j] = tmpNum;
+	public void setSpace(byte []space) {
+		mySpace = space;
+		if(mySpace.length>0){
+			spaceReady = true;
 		}
-	}
-	}
+		suffixArray = new int[space.length];
+		// put all suffixes	 in suffixArray. Each suffix is expressed by one integer.
+		for(int i = 0; i< space.length; i++) {
+			suffixArray[i] = i;
+		}
+		// Sorting is not implmented yet.
+		//
+		//
+		// ****	 Please write code here... ***
+		//
+		for (int i = 0; i < suffixArray.length - 1; i++) {
+			for (int j = suffixArray.length - 1; j > i; j--) {
+				int tmpNum = suffixArray[j-1];
+				int sufComp = suffixCompare(suffixArray[j-1], suffixArray[j]);
+				if(sufComp == 1){
+					tmpNum = suffixArray[j-1];
+					suffixArray[j-1] = suffixArray[j];
+					suffixArray[j] = tmpNum;
+				}
+			}
+		}
 	}
 
 	private int targetCompare(int i, int j, int end) {
@@ -137,16 +140,19 @@ public class Frequencer implements FrequencerInterface{
 	//
 	if(mySpace[i] > myTarget[j]){
 		return 1;
-	}else if(mySpace[i] < myTarget[j]){
+	}
+	else if(mySpace[i] < myTarget[j]){
 		return -1;
-	}else if(mySpace[i] == myTarget[j]){
+	}
+	else if(mySpace[i] == myTarget[j]){
 		if(mySpace.length-i < end-j){
-			return 1;
+			return -1;
 		}
 		for(j++, i++; j < end; j++, i++){
 			if(mySpace[i] > myTarget[j]){
 				return 1;
-			}else if(mySpace[i] < myTarget[j]){
+			}
+			else if(mySpace[i] < myTarget[j]){
 				return -1;
 			}
 		}

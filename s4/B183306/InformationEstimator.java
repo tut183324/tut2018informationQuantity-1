@@ -20,6 +20,8 @@ public class InformationEstimator implements InformationEstimatorInterface{
     byte [] myTarget; // data to compute its information quantity
     byte [] mySpace;  // Sample space to compute the probability
     FrequencerInterface myFrequencer;  // Object for counting frequency
+    boolean t_flag = false; //ターゲットがセットされている時:1 されていない時:0
+    boolean s_flag = false; //スペースがセットされている時:1 されていない時:0
 
     byte [] subBytes(byte [] x, int start, int end) {
         // corresponding to substring of String for  byte[] ,
@@ -34,53 +36,45 @@ public class InformationEstimator implements InformationEstimatorInterface{
         return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
-    public void setTarget(byte [] target) { myTarget = target;}
+    public void setTarget(byte [] target) {
+        myTarget = target;
+        if(myTarget.length > 0){
+            t_flag = true;
+        }
+    }
     public void setSpace(byte []space) { 
         myFrequencer = new Frequencer();
         mySpace = space; myFrequencer.setSpace(space);
+        if(mySpace.length > 0){
+            s_flag = true;
+        }
     }
 
     public double estimation(){
-        boolean [] partition = new boolean[myTarget.length+1];
-        int np;
-        np = 1<<(myTarget.length-1);
-        // System.out.println("np="+np+" length="+myTarget.length);
-        double value = Double.MAX_VALUE; // value = mininimum of each "value1".
-
-        for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
-            // binary representation of p forms partition.
-            // for partition {"ab" "cde" "fg"}
-            // a b c d e f g   : myTarget
-            // T F T F F T F T : partition:
-            partition[0] = true; // I know that this is not needed, but..
-            for(int i=0; i<myTarget.length -1;i++) {
-                partition[i+1] = (0 !=((1<<i) & p));
-            }
-            partition[myTarget.length] = true;
-
-            // Compute Information Quantity for the partition, in "value1"
-            // value1 = IQ(#"ab")+IQ(#"cde")+IQ(#"fg") for the above example
-            double value1 = (double) 0.0;
-            int end = 0;
-            int start = end;
-            while(start<myTarget.length) {
-                // System.out.write(myTarget[end]);
-                end++;
-                while(partition[end] == false) {
-                    // System.out.write(myTarget[end]);
-                    end++;
-                }
-                // System.out.print("("+start+","+end+")");
-                myFrequencer.setTarget(subBytes(myTarget, start, end));
-                value1 = value1 + iq(myFrequencer.frequency());
-                start = end;
-            }
-            // System.out.println(" "+ value1);
-
-            // Get the minimal value in "value"
-            if(value1 < value) value = value1;
+        if(t_flag == false || s_flag == false){
+            return 0.0;
         }
-        return value;
+        //valueの値を保存する配列
+        double[] value_store_array = new double[myTarget.length+1];
+        value_store_array[0] = 0.0;
+        //myTargetをセット
+        myFrequencer.setTarget(myTarget);
+        
+        for(int i = 1; i < myTarget.length; i++){
+            double value = Double.MAX_VALUE;
+            for(int j = 0; j < i; j++){
+                int frequence = myFrequencer.subByteFrequency(i,j);
+                if(frequence == 0){
+                    break;
+                }
+                double value1 = value_store_array[j] + iq(frequence);
+                if(value > value1){
+                    value = value1;
+                }
+            }
+            value_store_array[i] = value;
+        }
+        return value_store_array[value_store_array.length];
     }
 
     public static void main(String[] args) {

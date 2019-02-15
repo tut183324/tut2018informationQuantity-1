@@ -5,6 +5,6 @@ all:
 #	javac TestCase.java -classpath "../.."
 run:
 #	java -classpath "../.." s4.B183383/Hello
-#	java -classpath "../.." s4.B183383/Frequencer
+	java -classpath "../.." s4.B183383/Frequencer
 	java -classpath "../.." s4.B183383/InformationEstimator
 #	java -classpath "../.." s4.B183383/TestCase

@@ -22,7 +22,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     byte [] mySpace;  // Sample space to compute the probability
     FrequencerInterface myFrequencer;  // Object for counting frequency
     int x = 0;
-    TargetIq[] targetIq = new TargetIq[10000];
+
 
     byte [] subBytes(byte [] x, int start, int end) {
 	// corresponding to substring of String for  byte[] ,
@@ -46,6 +46,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     public double estimation(){
 	boolean [] partition = new boolean[myTarget.length+1];
 	int np;
+  TargetIq[] targetIq = new TargetIq[mySpace.length];
 	np = 1<<(myTarget.length-1);
 	// System.out.println("np="+np+" length="+myTarget.length);
 	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
@@ -75,7 +76,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 		}
 		// System.out.print("("+start+","+end+")");
 		myFrequencer.setTarget(subBytes(myTarget, start, end));
-		targetIq[x] = new TargetIq();
+		/*targetIq[x] = new TargetIq();
     boolean existIq = false;
     int k = 0;
     for(k = 0;k < x;k++) {
@@ -94,9 +95,14 @@ public class InformationEstimator implements InformationEstimatorInterface{
       value1 =  value1 + targetIq[k].iq;
     }
 
+    */
 
-
-		//value1 = value1 + iq(myFrequencer.frequency());
+    int freq = myFrequencer.frequency();
+    if(targetIq[freq] == null)
+      targetIq[freq] = new TargetIq();
+    if(targetIq[freq].iq == 0.0)
+      targetIq[freq].iq = iq(freq);
+    value1 = value1 + targetIq[freq].iq;
 		start = end;
 	    }
 	    // System.out.println(" "+ value1);
@@ -124,11 +130,12 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	myObject.setTarget("00".getBytes());
 	value = myObject.estimation();
 	System.out.println(">00 "+value);
+
+
     }
 }
 
 class TargetIq{
-	byte[] target;
-	double iq;
+	double iq = 0.0;
 
 }

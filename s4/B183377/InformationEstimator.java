@@ -43,17 +43,28 @@ public class InformationEstimator implements InformationEstimatorInterface {
 
 	public void setTarget(byte[] target) {
 		myTarget = target;
+		targetFlag = true;
 	}
 
 	public void setSpace(byte[] space) {
 		myFrequencer = new Frequencer();
 		mySpace = space;
 		myFrequencer.setSpace(space);
+		spaceFlag=true;
 	}
 
+	boolean targetFlag = false;
+	boolean spaceFlag=false;
+
 	public double estimation() {
+		if (!targetFlag||myTarget.length==0) {
+			return 0.0;
+		}
+		if (!spaceFlag) {
+			return Double.MAX_VALUE;
+		}
 		boolean[] partition = new boolean[myTarget.length + 1];
-		ArrayList<Double> st=new ArrayList<Double>();
+		ArrayList<Double> st = new ArrayList<Double>();
 		int np;
 		np = 1 << (myTarget.length - 1);
 		// System.out.println("np="+np+" length="+myTarget.length);
@@ -93,10 +104,13 @@ public class InformationEstimator implements InformationEstimatorInterface {
 				start = end;
 			}
 			// System.out.println(" "+ value1);
-			st.add(value1);		//store
+			st.add(value1); // store
 			// Get the minimal value in "value"
 			if (value1 < value)
 				value = value1;
+		}
+		if (Double.isInfinite(value)) {
+			return Double.MAX_VALUE;
 		}
 		return value;
 	}

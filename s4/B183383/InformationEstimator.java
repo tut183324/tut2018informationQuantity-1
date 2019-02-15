@@ -16,13 +16,9 @@ public interface InformationEstimatorInterface{
 */
 
 public class InformationEstimator implements InformationEstimatorInterface{
-    // Code to tet, *warning: This code contains intentional problem*
     byte [] myTarget; // data to compute its information quantity
     byte [] mySpace;  // Sample space to compute the probability
     FrequencerInterface myFrequencer;  // Object for counting frequency
-   
-    // corresponding to substring of String for  byte[] ,
-	// It is not implement in class library because internal structure of byte[] requires copy.
     byte [] subBytes(byte [] x, int start, int end) {
 		byte [] result = new byte[end - start];
 		for(int i = 0; i<end - start; i++) { 

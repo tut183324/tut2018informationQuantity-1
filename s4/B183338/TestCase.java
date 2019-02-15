@@ -115,7 +115,7 @@ public class TestCase {
 	    System.out.println("checking s4.B183338.InformationEstimator");
 	    myObject = new s4.B183338.InformationEstimator();
 	    myObject.setSpace("3210321001230123".getBytes());
-	    myObject.setTarget("0".getBytes());
+	    myObject.setTarget("".getBytes());
 	    value = myObject.estimation();
 	    System.out.println(">0 "+value);
 	    myObject.setTarget("01".getBytes());
@@ -129,7 +129,8 @@ public class TestCase {
 	    System.out.println(">00 "+value);
 	}
 	catch(Exception e){
-	    System.out.println("Exception occurred: STOP");
+	    //System.out.println("Exception occurred: STOP");
+		System.out.println(e);
 	}
 
     }

@@ -67,7 +67,7 @@ public class Frequencer implements FrequencerInterface{
 		for(int i = 0; i< space.length; i++) {
 			a[i] = suffixArray[i] = i;
 		}
-		printSuffixArray();
+		//printSuffixArray();
 		mergeSort(suffixArray);
 		//Copy the result to the suffixArray
 		//suffixArray = a;
@@ -99,7 +99,7 @@ public class Frequencer implements FrequencerInterface{
 		A:o Hi Ho
 		*/
 
-		printSuffixArray();
+		//printSuffixArray();
 	}
 
 	private void merge(int [] a1, int [] a2, int [] a) {

@@ -21,6 +21,9 @@ public class InformationEstimator implements InformationEstimatorInterface{
   byte [] mySpace;  // Sample space to compute the probability
   FrequencerInterface myFrequencer;  // Object for counting frequency
 
+  boolean targetReady = false;
+  boolean spaceReady = false;
+
   byte [] subBytes(byte [] x, int start, int end) {
     // corresponding to substring of String for  byte[] ,
     // It is not implement in class library because internal structure of byte[] requires copy.
@@ -34,13 +37,17 @@ public class InformationEstimator implements InformationEstimatorInterface{
     return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
   }
 
-  public void setTarget(byte [] target) { myTarget = target;}
+  public void setTarget(byte [] target) { myTarget = target;if(myTarget.length>0)targetReady=true;}
   public void setSpace(byte []space) {
     myFrequencer = new Frequencer();
     mySpace = space; myFrequencer.setSpace(space);
+    if(mySpace.length>0) spaceReady = true;
   }
-
+/*
   public double estimation(){
+    if(!targetReady) return 0.0;
+    if(!spaceReady) return Double.MAX_VALUE;
+
     //boolean [] partition = new boolean[myTarget.length+1];
     //int np;
     //np = 1<<(myTarget.length-1);
@@ -73,7 +80,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
       //value = minimam iq
       value = tempIQ[i];
     }
-    /*
+*/    /*
     for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
       // binary representation of p forms partition.
       // for partition {"ab" "cde" "fg"}
@@ -108,14 +115,54 @@ public class InformationEstimator implements InformationEstimatorInterface{
       // Get the minimal value in "value"
       if(value1 < value) value = value1;
     }
-    */
+    *//*
     return value;
+  }
+*/
+
+  public double estimation(){
+	boolean [] partition = new boolean[myTarget.length+1];
+	int np;
+	np = 1 << (myTarget.length-1);
+	double value = Double.MAX_VALUE;
+	
+	double[] strageIQ = new double[1 << (myTarget.length+1)];
+	
+	for(int p = 0; p < np; p++){
+		partition[0] = true;
+		for(int i = 0; i < myTarget.length - 1; i++){
+			partition[i+1] = (0 != ((1<<i) & p));
+		}
+		partition[myTarget.length] = true;
+
+		double value1 = (double) 0.0;
+		int end = 0;
+		int start = end;
+		while(start < myTarget.length){
+			end++;
+			while(partition[end] == false){
+				end++;
+			}
+			myFrequencer.setTarget(subBytes(myTarget, start, end));
+			if(strageIQ[(1<<start)+(1<<end)] != 0.0){
+//				System.out.println("ref");
+				value1 += strageIQ[(1<<start)+(1<<end)];
+			}else{
+//				System.out.println("calc");
+				strageIQ[(1<<start)+(1<<end)] = iq(myFrequencer.frequency());
+				value1 += strageIQ[(1<<start)+(1<<end)];
+			}
+			start = end;
+		}
+		if(value1 < value) value = value1;
+	}
+	return value;
   }
 
   public static void main(String[] args) {
     InformationEstimator myObject;
     double value;
-    long start = System.currentTimeMillis();
+//    long startTime = System.currentTimeMillis();
     myObject = new InformationEstimator();
     myObject.setSpace("3210321001230123".getBytes());
     myObject.setTarget("0".getBytes());
@@ -130,7 +177,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     myObject.setTarget("00".getBytes());
     value = myObject.estimation();
     System.out.println(">00 "+value);
-    long end = System.currentTimeMillis();
-    System.out.println((end - start) + "ms");
+//    long endTime = System.currentTimeMillis();
+//    System.out.println((endTime-startTime)+"ms");
   }
 }

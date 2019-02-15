@@ -20,7 +20,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
   byte [] myTarget; // data to compute its information quantity
   byte [] mySpace;  // Sample space to compute the probability
   FrequencerInterface myFrequencer;  // Object for counting frequency
-  double [][] IQ_save;
+//  double [][] IQ_save;
 
   byte [] subBytes(byte [] x, int start, int end) {
     // corresponding to substring of String for  byte[] ,
@@ -45,6 +45,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     myFrequencer.setSpace(space);
   }
 
+/*
   public void calc_IQ(){
     IQ_save = new double [myTarget.length][myTarget.length+1];
     for(int i=0;i<myTarget.length;i++){
@@ -56,6 +57,9 @@ public class InformationEstimator implements InformationEstimatorInterface{
     }
   }
 
+*/
+
+/*
   public double estimation(){
     boolean [] partition = new boolean[myTarget.length+1];
     int np;
@@ -103,6 +107,38 @@ public class InformationEstimator implements InformationEstimatorInterface{
       if(value1 < value) value = value1;
     }
     return value;
+  }
+  */
+
+  public double estimation(){
+
+    //入力除外
+    if (myTarget == null || myTarget.length == 0) return 0.0;
+    if (mySpace == null || mySpace.length == 0) return Double.MAX_VALUE;
+
+    //IQ_save：n文字目までの最小情報量を保存する．　例：myTaget="abcde"のとき，IQ_save[2]は"ab"までの最小情報量を保存する
+    //length+1しているのはIQ_saveの格納先をわかりやすくするためかつ，1文字目の情報量計算をfor文の中で行うため．
+    //(lengthを+1しなければi=0で始めることになり，計算の中でIQ_save[-1]が出現するため，例外処理が必要になってくる．)
+    double[] IQ_save = new double[myTarget.length+1];
+    myFrequencer.setTarget(myTarget);
+
+    //最小情報量の計算を行う．iはそのループで何文字目までの最小情報量を計算するかを示す．　例：myTaget="abcde"のとき，i=2は"ab"の最小情報量を計算する．
+    for(int i=1; i<=myTarget.length; i++){
+      double min = Double.MAX_VALUE;   //min：このループの最小情報量を保存．とりあえずMAXを代入
+      for(int j=i-1; j>=0; j--){
+        int freq = myFrequencer.subByteFrequency(j, i);   //myTarget[j]~myTarget[i]までのFrequencyを取得．
+        if(freq == 0){
+          if(j == i-1){
+            return Double.MAX_VALUE;    //1文字かつ，freq == 0が出るということはTargetそのものが存在するはずないためDouble.MAX_VALUEを返す
+          }
+          break;      //このループでfreq==0が出るということはそれ以降のループでもfreq==0が出るということなので計算を省略することができる．
+        }
+        min = Math.min(min, iq(freq)+IQ_save[j]);         //minと比較
+      }
+      IQ_save[i] = min;
+    }
+
+    return IQ_save[myTarget.length];
   }
 
   public static void main(String[] args) {

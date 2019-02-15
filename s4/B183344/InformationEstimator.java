@@ -43,9 +43,19 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
     public double estimation()
     {
-	double[] iqsave = new double[myTarget.length];
 	double value;
 	double tmp;
+	double[] iqsave = new double[myTarget.length];
+
+
+	if(myTarget == null)
+	    {
+		return 0;
+	    }
+	if(mySpace == null)
+	    {
+		return Double.MAX_VALUE;
+	    }
 
 	for(int i = 0; i < myTarget.length; i++)
 	    {

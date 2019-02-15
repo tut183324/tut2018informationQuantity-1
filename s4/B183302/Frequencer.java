@@ -1,5 +1,4 @@
-package s4.B183302; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
-
+package s4.B183302; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID.
 import s4.specification.*;
 
 /*
@@ -60,8 +59,8 @@ public class Frequencer implements FrequencerInterface {
         var order =  i < j;//比較しやすいようにiとjを並び替える
         if(!order){
             var temp = j ;
-            i = j;
-            j = temp;
+            j = i;
+            i = temp;
         }
         while (j < mySpace.length){
             var x = mySpace[i];
@@ -72,7 +71,7 @@ public class Frequencer implements FrequencerInterface {
                 continue;}
             return order ^ (x < y) ? -1 : 1;
         }
-        return order ? 1 : -1; // This line should be modified.
+        return order ? -1 : 1; // This line should be modified.
     }
 
     public void setSpace(byte []space) {
@@ -121,14 +120,15 @@ public class Frequencer implements FrequencerInterface {
         //
         // ****  Please write code here... ***
         //
+	var n = suffixArray[i];
         while (j < end) {
-            if(mySpace.length <= i){
+            if(mySpace.length <= n){
                 return -1;
             }
-            var x = mySpace[suffixArray[i]];
+            var x = mySpace[n];
             var y = myTarget[j];
             if(x == y){
-                i++;
+                n++;
                 j++;
                 continue;
             }
@@ -232,7 +232,10 @@ public class Frequencer implements FrequencerInterface {
             //
             // ****  Please write code to check subByteStartIndex, and subByteEndIndex
             //
-
+            int start,end;
+	    start = frequencerObject.subByteStartIndex(0,frequencerObject.myTarget.length);
+	    end = frequencerObject.subByteEndIndex(0,frequencerObject.myTarget.length);
+	    System.out.println("start:"+start+" end:"+end);
             int result = frequencerObject.frequency();
             System.out.print("Freq = "+ result+" ");
             if(4 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }

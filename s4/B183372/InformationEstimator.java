@@ -46,7 +46,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     }
     
     public void calc_IQ(){
-        IQ_save = new double [myTarget.length][myTarget.length+1];
+        //IQ_save = new double [myTarget.length][myTarget.length+1];
         for (int i=0;i<myTarget.length;i++){
             for (int j=i+1;j<myTarget.length+1;j++){
                 myFrequencer.setTarget(subBytes(myTarget, i, j));
@@ -63,7 +63,10 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
         
     //calculate IQ
-        calc_IQ();
+        //calc_IQ();
+        
+        
+    IQ_save = new double [myTarget.length][myTarget.length+1];
 
 	for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
 	    // binary representation of p forms partition.
@@ -82,25 +85,28 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	    int end = 0;;
 	    int start = end;
 	    while(start<myTarget.length) {
-		// System.out.write(myTarget[end]);
-		end++;;
-		while(partition[end] == false) {
-		    // System.out.write(myTarget[end]);
-		    end++;
-		}
-		// System.out.print("("+start+","+end+")");
-		//myFrequencer.setTarget(subBytes(myTarget, start, end));
-		//value1 = value1 + iq(myFrequencer.frequency());
-        value1 = value1 + IQ_save[start][end];
-		start = end;
+            //System.out.write(myTarget[end]);
+            end++;;
+            while(partition[end] == false) {
+                // System.out.write(myTarget[end]);
+                end++;
+            }
+             //System.out.print("("+start+","+end+")");
+            
+            if(IQ_save[start][end]==0.0){
+                myFrequencer.setTarget(subBytes(myTarget, start, end));
+                IQ_save[start][end] = iq(myFrequencer.frequency());
+            }
+            value1 = value1 + IQ_save[start][end];
+            start = end;
 	    }
-	    // System.out.println(" "+ value1);
+             //System.out.println(" "+ value1);
 
-	    // Get the minimal value in "value"
+            // Get the minimal value in "value"
 	    if(value1 < value) value = value1;
 	}
 	return value;
-    }
+}
 
     public static void main(String[] args) {
 	InformationEstimator myObject;
