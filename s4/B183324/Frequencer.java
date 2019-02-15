@@ -61,8 +61,6 @@ public class Frequencer implements FrequencerInterface{
     	// "Hi"     <  "Ho"       ; if head is same, compare the next element
     	// "Ho"     <  "Ho "      ; if the prefix is identical, longer string is big
     	//
-    	// ****  Please write code here... ***
-    	//
       for(; i < mySpace.length && j < mySpace.length; i++,j++){
         if(mySpace[i] > mySpace[j]){
           return 1;
@@ -79,12 +77,13 @@ public class Frequencer implements FrequencerInterface{
       else if((mySpace.length > i)&&(mySpace.length == j)){
         return 1;
       }
-	   return 0; // This line should be modified.
+	   return 0;
     }
-    /*
-    * マージ
-    * 2つの配列a1[]とa2[]を併合してa[]を作ります。
-    */
+
+    /**************************************************************************************
+      < merge >
+      make a[] by merging two arrays a1[], a2[]
+    **************************************************************************************/
     private void merge(int[] a1,int[] a2,int[] a){
       int i=0,j=0;
       while(i<a1.length || j<a2.length){
@@ -99,11 +98,10 @@ public class Frequencer implements FrequencerInterface{
       }
     }
 
-    /*
-    * マージソート
-    * 既にソート済みの2つの配列を併合して新しい配列を
-    * 生成することで、データのソートを行います。
-    */
+    /**************************************************************************************
+      < merge sort >
+      merge two arrays that already sorted to make sorted data
+    **************************************************************************************/
     private void mergeSort(int[] a){
       //System.out.println("length of a =" + a.length);
       if(a.length>1){
@@ -127,9 +125,9 @@ public class Frequencer implements FrequencerInterface{
       }
     }
 
-    /*
-    * ソート
-    */
+    /**************************************************************************************
+      < sort >
+    **************************************************************************************/
     private void sort(int[] a){
       mergeSort(a);
     }
@@ -144,7 +142,9 @@ public class Frequencer implements FrequencerInterface{
     	// Sorting is not implmented yet.
     	// ****  Please write code here... ***
 
+      /************************************************************************************
       //bubble sort
+      ************************************************************************************/
       /*for (int i = 0; i < mySpace.length - 1; i++) {
           for (int j = mySpace.length - 1; j > i; j--) {
               if (suffixCompare(suffixArray[j-1], suffixArray[j])==1) {
@@ -155,7 +155,9 @@ public class Frequencer implements FrequencerInterface{
           }
       }*/
 
-      //merge sort
+      /************************************************************************************
+        < merge sort >
+      ************************************************************************************/
       sort(suffixArray);
     }
 
@@ -179,8 +181,7 @@ public class Frequencer implements FrequencerInterface{
       // "Ho"      <     "Ho "   : "Ho " is not in the head of suffix "Ho"
     	// "Ho"      =     "H"     : "H" is in the head of suffix "Ho"
     	//
-    	// ****  Please write code here... ***
-    	//
+
         if(mySpace[i] > myTarget[j]){
           return 1;
         }
@@ -198,7 +199,7 @@ public class Frequencer implements FrequencerInterface{
               }
             }
           }
-          if(mySpace.length - i < end - j){
+          if((mySpace.length - i) < (end - j)){
             return -1;
           }
           /*if(mySpace.length < myTarget.length){
@@ -238,7 +239,7 @@ public class Frequencer implements FrequencerInterface{
           Right = middle - 1;
         }
       }
-    	return index; // This line should be modified.
+    	return index; // This line should be modified.*/
     }
 
     private int subByteEndIndex(int start, int end) {
@@ -272,7 +273,7 @@ public class Frequencer implements FrequencerInterface{
           Right = middle - 1;
         }
       }
-    	return index; // This line should be modified.
+    	return index;
     }
 
     public int subByteFrequency(int start, int end) {
@@ -305,39 +306,39 @@ public class Frequencer implements FrequencerInterface{
     }
 
     public static void main(String[] args) {
-	Frequencer frequencerObject;
-	try {
-	    frequencerObject = new Frequencer();
-	    frequencerObject.setSpace("Hi Ho Hi Ho".getBytes());
-	    //frequencerObject.printSuffixArray(); // you may use this line for DEBUG
-	    /* Example from "Hi Ho Hi Ho"
-	       0: Hi Ho
-	       1: Ho
-	       2: Ho Hi Ho
-	       3:Hi Ho
-	       4:Hi Ho Hi Ho
-	       5:Ho
-	       6:Ho Hi Ho
-	       7:i Ho
-	       8:i Ho Hi Ho
-	       9:o
-	       A:o Hi Ho
-	    */
-	    //frequencerObject.setTarget("H".getBytes());
-      frequencerObject.setTarget("Hi Ho Hi Ho H".getBytes());
-	    //
-	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
-	    //
-      /*for(int i = 0; i < frequencerObject.suffixArray.length; i++){
-        System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
-      }*/
-	    int result = frequencerObject.frequency();
-	    System.out.print("Freq = "+ result+" ");
-	    if(4 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
-	}
-	catch(Exception e) {
-	    System.out.println("STOP");
-      System.out.println(e);
+    	Frequencer frequencerObject;
+    	try {
+    	    frequencerObject = new Frequencer();
+    	    frequencerObject.setSpace("AAA".getBytes());
+    	    frequencerObject.printSuffixArray(); // you may use this line for DEBUG
+    	    /* Example from "Hi Ho Hi Ho"
+    	       0: Hi Ho
+    	       1: Ho
+    	       2: Ho Hi Ho
+    	       3:Hi Ho
+    	       4:Hi Ho Hi Ho
+    	       5:Ho
+    	       6:Ho Hi Ho
+    	       7:i Ho
+    	       8:i Ho Hi Ho
+    	       9:o
+    	       A:o Hi Ho
+    	    */
+    	    //frequencerObject.setTarget("H".getBytes());
+          frequencerObject.setTarget("AAAA".getBytes());
+    	    //
+    	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
+    	    //
+          for(int i = 0; i < frequencerObject.suffixArray.length; i++){
+            System.out.println("my=" + frequencerObject.targetCompare(frequencerObject.suffixArray[i], 0, frequencerObject.myTarget.length));
+          }
+    	    int result = frequencerObject.frequency();
+    	    System.out.println("Freq = "+ result+" ");
+    	    //if(4 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+    	}
+    	catch(Exception e) {
+    	    System.out.println("STOP");
+          System.out.println(e);
+      }
     }
-  }
 }
