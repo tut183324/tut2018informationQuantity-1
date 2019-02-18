@@ -64,6 +64,7 @@ public class Frequencer implements FrequencerInterface{
           return -1;
         }
         else if(mySpace[i] == mySpace[j]){
+          continue;
         }
       }
       if((mySpace.length == i)&&(mySpace.length > j)){
@@ -295,7 +296,7 @@ public class Frequencer implements FrequencerInterface{
     	Frequencer frequencerObject;
     	try {
     	    frequencerObject = new Frequencer();
-    	    frequencerObject.setSpace("AAABs".getBytes());
+    	    frequencerObject.setSpace("AAA".getBytes());
     	    frequencerObject.printSuffixArray(); // you may use this line for DEBUG
     	    /* Example from "Hi Ho Hi Ho"
     	       0: Hi Ho
@@ -310,7 +311,7 @@ public class Frequencer implements FrequencerInterface{
     	       9:o
     	       A:o Hi Ho
     	    */
-          frequencerObject.setTarget("AAA".getBytes());
+          frequencerObject.setTarget("AA".getBytes());
     	    //
     	    // ****  Please write code to check subByteStartIndex, and subByteEndIndex
     	    //
