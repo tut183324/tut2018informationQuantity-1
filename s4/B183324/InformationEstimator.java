@@ -50,7 +50,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 		if(!targetReady) return 0.0; // When Target length is 0 or Target is not setted.
 		if(!spaceReady)  return Double.MAX_VALUE; // When Space is not setted.
 		// "iqArray" that is keeping Results of Information Quantity.
-		double [] iqArray = new double[myTarget.length+1];
+		double[] iqArray = new double[myTarget.length+1];
 		iqArray[0] = 0.0; // "iqArray[0]" is not changed by Computing Information Quantity.
 		myFrequencer.setTarget(myTarget); // Set Target that is not subByte.
 
